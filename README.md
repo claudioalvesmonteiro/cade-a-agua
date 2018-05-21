@@ -1,5 +1,5 @@
 # Cadê a Água?
-### Identificação de Falhas na Distribuição de Água via Participação Social
+### Identificação de Falhas no Sistema de Abastecimento de Água via Participação Social
 
 ### **Justificativa**
 A água é um recurso vital para a vida. Nós, seres humanos, dependemos de uma água de qualidade para nossa saúde e a utilizamos em diversas etapas nas produções. Ainda assim, dados do Sistema Nacional de Informações Sobre Saneamento (SNIS) apontam que que há uma perda média de 36,7% no sistema de abastecimento de água brasileiro, na cidade do Recife esse índice chega a 51%, sendo a 10ª capital com maior perda. Ainda vale salientar que a distribuição dessa água é desigual no espaço urbano, em que há comunidades que relatam passar dias (às vezes até semanas) em situação de racionamento de água. As principais causas desse fenômeno são vazamentos e ligações clandestinas nos canos de distribuição. Os órgão público responsáveis também enfrentam diversas limitações para gerir esses problemas, como a falta de pessoal e recursos suficientes.
