@@ -11,22 +11,37 @@ Data: 2018-05-21
 Copyright(c) 2018 Claudio Luis Alves Monteiro
 """
 
-#========== importar usuarios ==========#
+#========== importar usuarios e funcoes ==========#
+
+# importar funcionalidades
+import os
+os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/codes")
+from observador_da_agua import *
+from processing_codes import *
 
 # visualizar e mudar diretorio de trabalho
-import os
 cwd = os.getcwd()
 os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/")
 
-# carrega lista de usuarios
+# carregar e ler lista de usuarios
 listaUser = open("data/usuarios.txt")
+listaUser = listaUser.readlines()
 
-# ler a lista e armazenar as infos em um dicionario
-observadores = 
+# separar as infos dos usuarios
+usuariosInfo = []
+for user in listaUser:
+    info = ""
+    for caracter in user:
+        if caracter != ";":
+            info += caracter
+        else:
+            usuariosInfo.append(info)
+            info = ""
 
-#========= inicio ==========#
 
-# mostra o que eh
+#========= INICIO ==========#
+
+# mostraR o que eh
 print("O 'Cadê a Água' é um programa para realizar reclamações sobre o abastecimento de água em sua cidade. Qualquer pessoas pode inserir as informações. Garantimos seu anonimato")
 
 # input user info
@@ -35,8 +50,7 @@ nomeUser = input("Qual o seu nome? ")
 cpfUser = input("Qual o seu CPF? ")
 emailUser = input("Qual seu email? ")
 
-#if cpfUser in observadores:
-#    import observador_da_agua from *
+#========= USUARIO SIMPLES =========#
 
 # funcao da reclamacao
 def reclama():
@@ -44,8 +58,6 @@ def reclama():
     localiza = ""
     reclama = int(input("1-Observei um vazamento de água na rua! /n 2-Observei uma ligação clandestina (jacaré) na rede de abastecimento! /n 3-Tá faltando água na minha casa!"))
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
-
-#========= USUARIO SIMPLES =========#
 
 # executa usuario simples
 if nomeUser not in observadores:
@@ -55,4 +67,7 @@ if nomeUser not in observadores:
 #========= USUARIO OBSERVADOR =========#
 
 # executa observador da algumas
-if nomeUser in observadores:
+# if nomeUser in observadores:
+
+#========= ARMAZENAR INFOS ===========#
+
