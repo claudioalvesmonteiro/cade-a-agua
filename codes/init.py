@@ -24,20 +24,25 @@ cwd = os.getcwd()
 os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/")
 
 # carregar e ler lista de usuarios
-listaUser = open("data/usuarios.txt")
+listaUser = open("data/usuariosChaves.txt")
 listaUser = listaUser.readlines()
 
-# separar as infos dos usuarios
-usuariosInfo = []
-for user in listaUser:
-    info = ""
-    for caracter in user:
-        if caracter != ";":
-            info += caracter
-        else:
-            usuariosInfo.append(info)
-            info = ""
+# remover \n e criar dicionario
+usuarios = removeCaracter(listaUser, "\n")
 
+for i in usuarios:
+
+
+# separar as infos dos usuarios
+#usuariosInfo = []
+#for user in listaUser:
+#    info = ""
+#    for caracter in user:
+#        if caracter != ";":
+#            info += caracter
+#        else:
+#            usuariosInfo.append(info)
+#            info = ""
 
 #========= INICIO ==========#
 
@@ -67,7 +72,8 @@ if nomeUser not in observadores:
 #========= USUARIO OBSERVADOR =========#
 
 # executa observador da algumas
-# if nomeUser in observadores:
+if nomeUser in observadores:
+    senhaUser = input("Olá ", nomeUser, " vimos que você é um observador da água. Para entrar na sua conta insira sua senha: ")
+    if senhaUser
 
-#========= ARMAZENAR INFOS ===========#
-
+#========= ARMAZENAR INFOS ==========#

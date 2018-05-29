@@ -19,6 +19,15 @@ def removeCaracter(lista,caracter):
         objetoMani = ""
         for caract in objeto:
             if caract != caracter:
-                objetoMani += carac
+                objetoMani += caract
         listaFinal.append(objetoMani)
     return listaFinal
+
+# trasnforma lista em dicionario em pares
+def listaDict(lista):
+    cont = 0
+    dicionario = {}
+    while cont < len(lista):
+        dicionario[lista[cont*2]] = [lista[cont*2+1]]
+        cont += 1
+    return dicionario

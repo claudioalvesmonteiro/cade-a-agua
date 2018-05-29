@@ -15,10 +15,14 @@ Copyright(c) 2018 Claudio Luis Alves Monteiro
 # FUNCIONALIDADES
 
 #========== Visualizar Hanking =========#
+#def visuHank():
+
 
 #========== Visualizar Infos Pessoais =========#
 
 #========== Baixar base de dados das Reclamacoes =========#
 
 #========== MENU OBSERVADOR ============#
-def menuObservador():
+#def menuObservador():
+#    senhaUser = input("Olá ", nomeUser, " vimos que você é um observador da água. Para entrar na sua conta insira sua senha: ")
+#    if senhaUser
