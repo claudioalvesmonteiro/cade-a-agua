@@ -23,26 +23,16 @@ from processing_codes import *
 cwd = os.getcwd()
 os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/")
 
-# carregar e ler lista de usuarios
-listaUser = open("data/usuariosChaves.txt")
-listaUser = listaUser.readlines()
+#=== usuarios ===#
+listaUser = open("data/usuariosChaves.txt") # abrir arquivo
+listaUser = listaUser.readlines() # ler linhas
+usuarios = removeCaracter(listaUser, "\n") # remover \#
+usuarios = listaDict(usuarios) # transformar em dicionario
 
-# remover \n e criar dicionario
-usuarios = removeCaracter(listaUser, "\n")
-
-for i in usuarios:
-
-
-# separar as infos dos usuarios
-#usuariosInfo = []
-#for user in listaUser:
-#    info = ""
-#    for caracter in user:
-#        if caracter != ";":
-#            info += caracter
-#        else:
-#            usuariosInfo.append(info)
-#            info = ""
+#=== reclamacoes ===#
+ listaReclama = open("data/reclamacoes.txt") # abrir arquivo
+ listaReclama = listaReclama.readlines() # ler linhas
+ reclamacoes = removeCaracter(listaReclama, "\n") # remover \#
 
 #========= INICIO ==========#
 
@@ -56,18 +46,13 @@ cpfUser = input("Qual o seu CPF? ")
 emailUser = input("Qual seu email? ")
 
 #========= USUARIO SIMPLES =========#
-
-# funcao da reclamacao
-def reclama():
-    tipo = ""
-    localiza = ""
+if cpfUser not in usuarios:
+    print("Olá ", nomeUser, "Selecione o tipo de reclamação que você deseja fazer: ")
     reclama = int(input("1-Observei um vazamento de água na rua! /n 2-Observei uma ligação clandestina (jacaré) na rede de abastecimento! /n 3-Tá faltando água na minha casa!"))
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
-
-# executa usuario simples
-if nomeUser not in observadores:
-    print("Olá ", nomeUser, "Selecione o tipo de reclamação que você deseja fazer: ")
-    reclama()
+    codReclama = int(reclamacao[len(reclamacao)-4]) + 1 # codigo da ultima reclamacao registrada + 1
+    reclamacao = [codReclama, cpfUser, reclama, localiza]
+    reclamacoes.append(reclamacao)
 
 #========= USUARIO OBSERVADOR =========#
 
