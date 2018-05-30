@@ -24,15 +24,15 @@ cwd = os.getcwd()
 os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/")
 
 #=== usuarios ===#
-listaUser = open("data/usuariosChaves.txt") # abrir arquivo
+listaUser = open("data/usuariosChaves.txt", 'r') # abrir arquivo
 listaUser = listaUser.readlines() # ler linhas
 usuarios = removeCaracter(listaUser, "\n") # remover \#
 usuarios = listaDict(usuarios) # transformar em dicionario
 
 #=== reclamacoes ===#
- listaReclama = open("data/reclamacoes.txt") # abrir arquivo
- listaReclama = listaReclama.readlines() # ler linhas
- reclamacoes = removeCaracter(listaReclama, "\n") # remover \#
+listaReclama = open("data/reclamacoes.txt", 'w') # abrir arquivo
+reclamacoes = listaReclama.readlines() # ler linhas
+reclamacoes = removeCaracter(listaReclama, "\n") # remover \#
 
 #========= INICIO ==========#
 
@@ -55,10 +55,21 @@ if cpfUser not in usuarios:
     reclamacoes.append(reclamacao)
 
 #========= USUARIO OBSERVADOR =========#
+#if cpfUser in usuarios:
+#    quebra = false
+#    senhaUser = input("Olá ", nomeUser, " vimos que você é um observador da água. Para entrar na sua conta insira sua senha: ")
+#    while quebra == false:
+#        if senhaUser == usuarios[cpfUser]:
+#            menuObservador():
+#            quebra = true
+#        else:
+#            input("Senha incorreta. Digite novamente: ")
 
-# executa observador da algumas
-if nomeUser in observadores:
-    senhaUser = input("Olá ", nomeUser, " vimos que você é um observador da água. Para entrar na sua conta insira sua senha: ")
-    if senhaUser
+#========= SALVAR INFOS ==========#
 
-#========= ARMAZENAR INFOS ==========#
+#==== reclamacoes ====#
+reclamacoesString = plusText(reclamacoes) # transformar lista em string com '\n'
+listaReclama.write(reclamacoesString) # escrever as relcamacoes
+listaReclama.close() # fechar arquivo
+
+#==== usuarios ====

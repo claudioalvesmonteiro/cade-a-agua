@@ -14,9 +14,19 @@ Copyright(c) 2018 Claudio Luis Alves Monteiro
 #=====================
 # FUNCIONALIDADES
 
+# separar as infos dos usuarios
+# usuariosInfo = []
+# for user in listaUser:
+#    info = ""
+#    for caracter in user:
+#        if caracter != ";":
+#            info += caracter
+#        else:
+#            usuariosInfo.append(info)
+#            info = ""
+
 #========== Visualizar Hanking =========#
 #def visuHank():
-
 
 #========== Visualizar Infos Pessoais =========#
 

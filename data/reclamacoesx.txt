@@ -1,0 +1,10 @@
+rec0
+01803945257
+2
+Torre, Rua José de Holanda, 510
+rec1
+01803945257
+2
+Madalena, Rua Renato de Medeiros, 78
+rec2
+

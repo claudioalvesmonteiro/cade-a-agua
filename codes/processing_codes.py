@@ -27,7 +27,16 @@ def removeCaracter(lista,caracter):
 def listaDict(lista):
     cont = 0
     dicionario = {}
-    while cont < len(lista):
-        dicionario[lista[cont*2]] = [lista[cont*2+1]]
+    while (cont*2+1) < len(lista):
+        dicionario[lista[cont*2]] = lista[cont*2+1]
         cont += 1
     return dicionario
+
+# acrescenta texto ao fim de cada objeto numa lista
+def plusText(lista):
+    stringLista = ""
+    for caso in lista:
+        casoNovo = ""
+        casoNovo = caso + "\n"
+        stringLista += casoNovo
+    return stringLista
