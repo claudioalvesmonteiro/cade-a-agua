@@ -30,9 +30,10 @@ usuarios = removeCaracter(listaUser, "\n") # remover \#
 usuarios = listaDict(usuarios) # transformar em dicionario
 
 #=== reclamacoes ===#
-listaReclama = open("data/reclamacoes.txt", 'r') # abrir arquivo
+listaReclama = open("data/reclamacoes.txt", 'r+') # abrir arquivo
 reclamacoes = listaReclama.readlines() # ler linhas
 reclamacoes = removeCaracter(reclamacoes, "\n") # remover \#
+print(reclamacoes)
 
 #========= INICIO ==========#
 
@@ -49,12 +50,10 @@ emailUser = input("Qual seu email? ")
 if cpfUser not in usuarios:
     reclamacao = []
     print("Olá ", nomeUser, "Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
-    reclama = int(input("Digite o número da reclamação: "))
+    reclama = str(int(input("Digite o número da reclamação: ")))
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
     codReclama = str(int(reclamacoes[len(reclamacoes)-4])+1) # codigo da ultima reclamacao registrada + 1
     reclamacao = [codReclama, cpfUser, reclama, localiza]
-    for i in reclamacao:
-        reclamacoes.append(i)
 
 #========= USUARIO OBSERVADOR =========#
 #if cpfUser in usuarios:
@@ -70,9 +69,8 @@ if cpfUser not in usuarios:
 #========= SALVAR INFOS ==========#
 
 #==== reclamacoes ====#
-print(reclamacoes)
-reclamacoesString = plusText(reclamacoes) # transformar lista em string com '\n'
-listaReclama.write(reclamacoesString) # escrever as relcamacoes
+reclamacaoStr = plusText(reclamacao) # transformar lista em string com '\n'
+listaReclama.write(reclamacaoStr) # escrever as relcamacoes
 listaReclama.close() # fechar arquivo
 
 #==== usuarios ====
