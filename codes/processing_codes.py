@@ -40,3 +40,5 @@ def plusText(lista):
         casoNovo = caso + "\n"
         stringLista += casoNovo
     return stringLista
+
+# automatizar
