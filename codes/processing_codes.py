@@ -10,15 +10,16 @@ Data: 2018-05-21
 
 Copyright(c) 2018 Claudio Luis Alves Monteiro
 """
+
 #============ Input Reclamacao ===========#
-def reclamacao(reclamacoes, user_nome, cpf_user):
-    reclamacao = []
-    print("Olá ", user_nome, "Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
+def Reclamacao(reclamaNew, reclamacoes, user_nome, user_cpf):
+    print("Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
     reclama = str(int(input("Digite o número da reclamação: ")))
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
     codReclama = str(int(reclamacoes[len(reclamacoes)-4])+1) # codigo da ultima reclamacao registrada + 1
-    reclamacao = [codReclama, cpf_user, reclama, localiza]
-    return reclamacao
+    rec = [codReclama, user_cpf, reclama, localiza]
+    for info in rec:
+        reclamaNew.append(info)
 
 #============ PROCESSANDO AS INFOS =================#
 
@@ -35,6 +36,19 @@ def maniUserData(user_data):
                 usuarioInfo += caracter
     return listaUser
 
+#========= salvar infos de usuarios ==========#
+# Atencao!! INCLUIR POSSIBILIDADE DE MAIS DE UMA RECLAMACAO
+def atualizarUser(user_data, reclamaNew, user_cpf):
+    user_data_att = user_data
+    # att lista de codigos reclamacao
+    codes_rec = user_data[user_data.index(user_cpf)+5]
+    codes_rec += "," + reclamaNew[0]
+    user_data_att[user_data.index(user_cpf)+5] = codes_rec
+    # att contagem de reclamacoes
+    cont_rec = int(user_data[user_data.index(user_cpf)+6]) + 1
+    user_data_att[user_data.index(user_cpf)+6] = cont_rec
+    # retornar
+    return user_data_att
 
 #============== Ferramentas Gerais ===============#
 
@@ -58,19 +72,48 @@ def plusText(lista):
         stringLista += casoNovo
     return stringLista
 
+# ATENCAO DESENVLVER PARA user_data
+# acrescenta texto ao fim de cada objeto numa lista
+def plusTextUser(lista):
+    stringLista = ""
+    for caso in lista:
+        casoNovo = ""
+        casoNovo = caso + "\n"
+        stringLista += casoNovo
+    return stringLista
+
 #================= FUNCIONALIDADES OBSERVADOR ==============#
 
-#========== Visualizar Hanking =========#
-#
+#========== Visualizar Ranking =========#
+
+# contar quantas no total (ultima rec + 1)
+# contar quantas vezes cada cpf se repete
+# parear com infos de usuarios
+# obsevadoresAnonimos = total - totalDosObservadores
+# lista contagem por nome do observador + obsevadoresAnonimos
 
 #========== Visualizar Infos Pessoais =========#
+def visuInfoUser(user_data, user_cpf):
+    infos = user_data[user_data.index(user_cpf):user_data.index(user_cpf)+7]
+    print("\n", "CPF: ", user_cpf, "\n" ,"Nome: ", infos[2], "\n" ,"Nível de acesso: ", infos[3], "\n",
+    "Email: ", infos[4], "\n" ,"Número de reclamações realizadas: ", infos[6], "\n")
 
 #========== Baixar base de dados das Reclamacoes =========#
 
 #========== MENU OBSERVADOR ============#
-#def menuObservador():
-#    senhaUser = input("Olá ", nomeUser, " vimos que você é um observador da água. Para entrar na sua conta insira sua senha: ")
-#    if senhaUser
+def menuObservador(user_data, reclamaNew, reclamacoes, user_nome, user_cpf):
+    pare = False
+    while pare == False:
+        print("Olá, ", user_nome, "! Bem vind@ de volta. O que você deseja?\n1-Visualizar minhas informações pessoais\n2-Fazer uma reclamação\n3-Sair")
+        fazer = int(input("Digite o numero da ação: "))
+        if fazer == 1:
+            visuInfoUser(user_data, user_cpf)
+        elif fazer == 2:
+            Reclamacao(reclamaNew, reclamacoes, user_nome, user_cpf)
+        elif fazer == 3:
+            pare = True
+        else:
+            print("Código de ação inválido")
 
 # trasnforma lista em dicionario em pares
 #def dictUserCount(lista):

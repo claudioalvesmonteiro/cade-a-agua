@@ -5,12 +5,20 @@ Torre, Rua José de Holanda, 510
 1
 01803945257
 2
-Madalena, Rua Renato de Medeiros, 780
+Madalena, Rua Renato de Medeiros, 78
 2
-0180394525X
-2
-Rua renato de jurubeba, 78
-3
 01803945257
 1
-Rua José de Holando, 155
+Madalena, Rua Renato de Medeiros, 78
+3
+08109345575
+1
+Torre, Rua José de Holanda, 155
+4
+01803945257
+3
+teste, 100
+5
+01803945257
+3
+teste, 10000
