@@ -6,5 +6,11 @@ Torre, Rua José de Holanda, 510
 01803945257
 2
 Madalena, Rua Renato de Medeiros, 78
-
-
+2
+01803945257
+1
+Madalena, Rua Renato de Medeiros, 78
+3
+08109345575
+1
+Torre, Rua José de Holanda, 155

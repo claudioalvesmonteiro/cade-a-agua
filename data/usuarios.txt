@@ -1,2 +1,0 @@
-01803945257;Cláudio Monteiro;desenvolvedor;rec0,rec1,rec2;
-08109345575;Demétrius;observador;rec3,rec4;

@@ -1,0 +1,3 @@
+cpf;senha;nome;nivel_acesso;email;cod_reclama;cont_reclama
+01803945257;ommanipadmehum;Cláudio Monteiro;desenvolvedor;claudiomonteirol.a@gmail.com;0,1,3;3
+0180394525X;000000;Demétrius;demetriusrff@gmail.com;observador;2;2
