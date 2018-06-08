@@ -11,7 +11,44 @@ Data: 2018-05-21
 Copyright(c) 2018 Claudio Luis Alves Monteiro
 """
 
-#============ Input Reclamacao ===========#
+#====================== PROCESSANDO AS INFOS =====================#
+
+#======== criar dict dados usuarios =========#
+def maniUserData(user_data):
+    # remover "\n"
+    user_data = removeCaracter(user_data, "\n")
+    # criar lista das infos
+    listaUser = []
+    for info in user_data:
+        usuarioInfo = ""
+        for caracter in info:
+            if caracter == ";":
+                listaUser.append(usuarioInfo)
+                usuarioInfo = ""
+            else:
+                usuarioInfo += caracter
+    # criar dicionario das infos
+    dict_user = {}
+    cont = 7
+    while cont < len(listaUser):
+        dict_user[listaUser[cont]] = (listaUser[cont+1],listaUser[cont+2],listaUser[cont+3], listaUser[cont+4],listaUser[cont+5], int(listaUser[cont+6]))
+        cont += 7
+    return dict_user
+
+#======== criar lista dados reclamacoes ========#
+def maniReclamaData(reclamacoes):
+    # remover "\n"
+    reclamacoes = removeCaracter(reclamacoes, "\n") # remover \#
+    # criar lista de reclamacoes
+    cont = 0
+    lista_reclama = []
+    while cont < len(reclamacoes):
+        lista_reclama.append([reclamacoes[cont], reclamacoes[cont+1], reclamacoes[cont+2], int(reclamacoes[cont+3])])
+        cont += 4
+    return lista_reclama
+
+#======================= RECLAMACAO =====================#
+
 def Reclamacao(reclamaNew, reclamacoes, user_nome, user_cpf):
     print("Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
     reclama = str(int(input("Digite o número da reclamação: ")))
@@ -20,21 +57,6 @@ def Reclamacao(reclamaNew, reclamacoes, user_nome, user_cpf):
     rec = [codReclama, user_cpf, reclama, localiza]
     for info in rec:
         reclamaNew.append(info)
-
-#============ PROCESSANDO AS INFOS =================#
-
-#======== manipular dados usuarios =========#
-def maniUserData(user_data):
-    listaUser = []
-    for usuario in user_data:
-        usuarioInfo = ""
-        for caracter in usuario:
-            if caracter == ";":
-                listaUser.append(usuarioInfo)
-                usuarioInfo = ""
-            else:
-                usuarioInfo += caracter
-    return listaUser
 
 #========= salvar infos de usuarios ==========#
 # Atencao!! INCLUIR POSSIBILIDADE DE MAIS DE UMA RECLAMACAO
@@ -109,7 +131,7 @@ def menuObservador(user_data, reclamaNew, reclamacoes, user_nome, user_cpf):
         if fazer == 1:
             visuInfoUser(user_data, user_cpf)
         elif fazer == 2:
-            Reclamacao(reclamaNew, reclamacoes, user_nome, user_cpf)
+            Reclamacao(reclamaNew, reclamacoes, user_cpf)
         elif fazer == 3:
             pare = True
         else:
