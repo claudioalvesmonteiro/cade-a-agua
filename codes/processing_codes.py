@@ -43,22 +43,27 @@ def maniReclamaData(reclamacoes):
     cont = 0
     lista_reclama = []
     while cont < len(reclamacoes):
-        lista_reclama.append([reclamacoes[cont], reclamacoes[cont+1], reclamacoes[cont+2], int(reclamacoes[cont+3])])
+        lista_reclama.append([reclamacoes[cont], reclamacoes[cont+1], reclamacoes[cont+2], reclamacoes[cont+3]])
         cont += 4
     return lista_reclama
 
 #======================= RECLAMACAO =====================#
-
-def Reclamacao(reclamaNew, reclamacoes, user_nome, user_cpf):
+def Reclamacao(reclamaCod, reclamaNew, user_cpf):
     print("Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
-    reclama = str(int(input("Digite o número da reclamação: ")))
+    reclama = input("Digite o número da reclamação: ")
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
-    codReclama = str(int(reclamacoes[len(reclamacoes)-4])+1) # codigo da ultima reclamacao registrada + 1
+    codReclama = str(reclamaCod + 1) # codigo da ultima reclamacao registrada + 1
     rec = [codReclama, user_cpf, reclama, localiza]
-    for info in rec:
-        reclamaNew.append(info)
+    reclamaNew.append(rec)
+
+#======================= CADASTRAR OBSERVADOR ===================#
+
+#+++++++
+
+#======================= SALVAR INFOS ======================#
 
 #========= salvar infos de usuarios ==========#
+#*********
 # Atencao!! INCLUIR POSSIBILIDADE DE MAIS DE UMA RECLAMACAO
 def atualizarUser(user_data, reclamaNew, user_cpf):
     user_data_att = user_data
@@ -108,6 +113,7 @@ def plusTextUser(lista):
 
 #========== Visualizar Ranking =========#
 
+#+++++++
 # contar quantas no total (ultima rec + 1)
 # contar quantas vezes cada cpf se repete
 # parear com infos de usuarios
@@ -115,14 +121,20 @@ def plusTextUser(lista):
 # lista contagem por nome do observador + obsevadoresAnonimos
 
 #========== Visualizar Infos Pessoais =========#
+
+#*********
 def visuInfoUser(user_data, user_cpf):
     infos = user_data[user_data.index(user_cpf):user_data.index(user_cpf)+7]
     print("\n", "CPF: ", user_cpf, "\n" ,"Nome: ", infos[2], "\n" ,"Nível de acesso: ", infos[3], "\n",
     "Email: ", infos[4], "\n" ,"Número de reclamações realizadas: ", infos[6], "\n")
 
-#========== Baixar base de dados das Reclamacoes =========#
+#========== baixar base de dados das Reclamacoes =========#
 
-#========== MENU OBSERVADOR ============#
+#+++++++
+
+#========== menu observador ============#
+
+#*********
 def menuObservador(user_data, reclamaNew, reclamacoes, user_nome, user_cpf):
     pare = False
     while pare == False:
@@ -136,12 +148,3 @@ def menuObservador(user_data, reclamaNew, reclamacoes, user_nome, user_cpf):
             pare = True
         else:
             print("Código de ação inválido")
-
-# trasnforma lista em dicionario em pares
-#def dictUserCount(lista):
-#    cont = 0
-#    dicionario = {}
-#    while (cont*2+1) < len(lista):
-#        dicionario[lista[cont*2]] = lista[cont*2+1]
-#        cont += 1
-#    return dicionario
