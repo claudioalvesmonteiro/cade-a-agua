@@ -59,8 +59,8 @@ if cadastro == 2:
             fluxo = True
         else:
             simples = int(input("Digite 1 para se cadastrar e 2 para apenas reportar um problema: "))
- #   if simples == 1:
-#        cadastroObservador()
+    if simples == 1:
+        cadastroObservador()
     if simples == 2:
         user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
         Reclamacao(reclamaCod, reclamaNew, user_cpf)
@@ -79,7 +79,7 @@ if cadastro == 1:
     # verifica senha e abre menuObservador
     quebraB = False
     while quebraB == False:
-        if user_senha == user_data[user_data.index(user_cpf)+1]:
+        if user_senha == user_data[user_cpf][1]:
             menuObservador(user_data, reclamaNew, reclamaCod, reclamaNew, user_cpf)
             quebraB = True
         else:

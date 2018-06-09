@@ -76,8 +76,6 @@ def cadastroObservador(user_data):
     # armazeanar infos
     user_data[user_cpf] = (user_senha, user_nome, user_email, "", 0)
 
-
-
 #============== Ferramentas Gerais ===============#
 
 # retorna uma lista de objetos, sem um determinado caracter
@@ -162,8 +160,18 @@ def saveReclamacoes(reclamaNew, lista_reclama):
     lista_reclama.close() # fechar arquivo
 
 #=========  usuarios ==========#
-def atualizarUser(user_data, reclamaNew):
-
-    # atualizar dados usuarios com base nas reclamacoes
-
-    return user_data_att
+def saveUsuarios(user_data, reclamaNew, lista_user_data):
+    # atualizar user_data por reclamacoes
+    for reclama in reclamaNew:
+        user_data[reclama[1]] = (user_data[reclama[1]][0], user_data[reclama[1]][1], user_data[reclama[1]][2],
+        user_data[reclama[1]][3], user_data[reclama[1]][4]+ reclama[0], user_data[reclama[1]][5]+1)
+    # string write
+    userDataWrite = ""
+    for usuario in user_data:
+        userDataWrite += usuario + ";"
+        for info in user_data[usuario]:
+            userDataWrite += str(info) + ";"
+        userDataWrite += "\n"
+    # salvar arquivo
+    lista_user_data.write(userDataWrite)
+    lista_user_data.close()
