@@ -23,7 +23,7 @@ user_data = lista_user_data.readlines() # ler linhas
 user_data = maniUserData(user_data) # dicionario de dados dos usuarios
 
 #================ reclamacoes ================#
-lista_reclama = open("data/reclamacoes.txt", 'r') # abrir arquivo
+lista_reclama = open("data/reclamacoes.txt", 'r+') # abrir arquivo
 reclamacoes = lista_reclama.readlines() # ler linhas
 reclamacoes = maniReclamaData(reclamacoes) # criar dicionario de reclamacoes
 
@@ -40,17 +40,26 @@ print("Vocẽ já é cadastrado como um 'observador da água'?")
 cadastro = int(input("Se sim, digite 1, se não, digite 2: "))
 
 # testa cadastro correto
-while cadastro != 1 or cadastro != 2 or cadastro != 0:
-    cadastro = int(input("Digite 1 se você é cadastrado na plataforma ou 2 se não é cadastrado: "))
+fluxo = False
+while fluxo == False:
+    if cadastro == 1 or cadastro == 2 or cadastro == 0:
+        fluxo = True
+    else:
+        cadastro = int(input("Digite 1 se você é cadastrado na plataforma ou 2 se não é cadastrado: "))
 
 #================ USUARIO SIMPLES ===============#
 if cadastro == 2:
     print("Você deseja se cadastrar como um 'observador da água' ou apenas reportar um problema de abastecimento de água?")
     print("Para conhecer os benefícios de ser um observador da água gratuitamente, acesse o link: ")
     simples = int(input("Para se cadastrar digite 1, para apenas reportar um problema digite 2: "))
-    while simples != 1 or simples != 2:
-        simples = int(input("Digite 1 para se cadastrar e 2 para apenas reportar um problema: "))
-#    if simples == 1:
+    # testa cadastro correto
+    fluxo = False
+    while fluxo == False:
+        if simples == 1 or simples == 2:
+            fluxo = True
+        else:
+            simples = int(input("Digite 1 para se cadastrar e 2 para apenas reportar um problema: "))
+ #   if simples == 1:
 #        cadastroObservador()
     if simples == 2:
         user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
@@ -83,10 +92,7 @@ if cadastro == 1:
 
 #========= SALVAR INFOS ==========#
 if reclamaNew != []:
-    # reclamacoes
-    reclamaNewStr = plusText(reclamaNew) # transformar lista em string com '\n'
-    lista_reclama.write(reclamaNewStr) # escrever as relcamacoes
-    lista_reclama.close() # fechar arquivo
+    saveReclamacoes(reclamaNew, lista_reclama)
     # usuarios
     if user_cpf in user_data:
         user_data_att = atualizarUser(user_data, reclamaNew, user_cpf)
@@ -95,4 +101,4 @@ if reclamaNew != []:
         lista_user_data.close() # fechar arquivo
 
 #==== mensagem final ====#
-print("\nAgradecemos sua colaboração!\nSe você deseja se tornar um(a) observador(a) da água... chega mais")
+print("\nAgradecemos sua colaboração! Para saber mais sobre nosso trabalho acesse: https://observatoriosar.wordpress.com/")

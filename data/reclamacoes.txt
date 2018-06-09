@@ -22,3 +22,7 @@ teste, 100
 01803945257
 3
 teste, 10000
+6
+018039452XX
+3
+Rua testeNovaSTR, XXXXX

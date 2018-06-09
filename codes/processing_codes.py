@@ -57,25 +57,26 @@ def Reclamacao(reclamaCod, reclamaNew, user_cpf):
     reclamaNew.append(rec)
 
 #======================= CADASTRAR OBSERVADOR ===================#
+def cadastroObservador(user_data):
+    # input infos do usuario
+    user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
+    user_nome = input("Crie seu nome de usuário: ")
+    user_email = input("Digite seu email: ")
+    user_senha = input("Digite sua senha de acesso: ")
+    user_senha2 = input("Repita a senha, por favor: ")
+    # testar senhas
+    fluxo = False
+    while fluxo == False:
+        if user_senha == user_senha2:
+            fluxo = True
+        else:
+            print("Senhas não conferem")
+            user_senha = input("Digite sua senha de acesso: ")
+            user_senha2 = input("Repita a senha, por favor: ")
+    # armazeanar infos
+    user_data[user_cpf] = (user_senha, user_nome, user_email, "", 0)
 
-#+++++++
 
-#======================= SALVAR INFOS ======================#
-
-#========= salvar infos de usuarios ==========#
-#*********
-# Atencao!! INCLUIR POSSIBILIDADE DE MAIS DE UMA RECLAMACAO
-def atualizarUser(user_data, reclamaNew, user_cpf):
-    user_data_att = user_data
-    # att lista de codigos reclamacao
-    codes_rec = user_data[user_data.index(user_cpf)+5]
-    codes_rec += "," + reclamaNew[0]
-    user_data_att[user_data.index(user_cpf)+5] = codes_rec
-    # att contagem de reclamacoes
-    cont_rec = int(user_data[user_data.index(user_cpf)+6]) + 1
-    user_data_att[user_data.index(user_cpf)+6] = cont_rec
-    # retornar
-    return user_data_att
 
 #============== Ferramentas Gerais ===============#
 
@@ -109,7 +110,7 @@ def plusTextUser(lista):
         stringLista += casoNovo
     return stringLista
 
-#================= FUNCIONALIDADES OBSERVADOR ==============#
+#======================== FUNCIONALIDADES OBSERVADOR =======================#
 
 #========== Visualizar Ranking =========#
 
@@ -148,3 +149,21 @@ def menuObservador(user_data, reclamaNew, reclamacoes, user_nome, user_cpf):
             pare = True
         else:
             print("Código de ação inválido")
+
+#=========================== SALVAR INFOS ===========================#
+
+#============== reclamacoes =============#
+def saveReclamacoes(reclamaNew, lista_reclama):
+    reclamaWrite = ""
+    for reclama in reclamaNew:
+        for info in reclama:
+            reclamaWrite += info + "\n"
+    lista_reclama.write(reclamaWrite) # escrever as relcamacoes
+    lista_reclama.close() # fechar arquivo
+
+#=========  usuarios ==========#
+def atualizarUser(user_data, reclamaNew):
+
+    # atualizar dados usuarios com base nas reclamacoes
+
+    return user_data_att
