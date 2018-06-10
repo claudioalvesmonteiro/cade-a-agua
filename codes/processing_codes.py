@@ -52,14 +52,13 @@ def Reclamacao(reclamaCod, reclamaNew, user_cpf):
     print("Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
     reclama = input("Digite o número da reclamação: ")
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
-    codReclama = str(reclamaCod + 1) # codigo da ultima reclamacao registrada + 1
+    codReclama = reclamaCod + 1 # codigo da ultima reclamacao registrada + 1
     rec = [codReclama, user_cpf, reclama, localiza]
     reclamaNew.append(rec)
 
 #======================= CADASTRAR OBSERVADOR ===================#
-def cadastroObservador(user_data):
+def cadastroObservador(user_data, user_cpf):
     # input infos do usuario
-    user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
     user_nome = input("Crie seu nome de usuário: ")
     user_email = input("Digite seu email: ")
     user_senha = input("Digite sua senha de acesso: ")
@@ -74,7 +73,8 @@ def cadastroObservador(user_data):
             user_senha = input("Digite sua senha de acesso: ")
             user_senha2 = input("Repita a senha, por favor: ")
     # armazeanar infos
-    user_data[user_cpf] = (user_senha, user_nome, user_email, "", 0)
+    user_data[user_cpf] = (user_senha, user_nome, user_email, "observador","", 0)
+
 
 #============== Ferramentas Gerais ===============#
 
@@ -134,15 +134,15 @@ def visuInfoUser(user_data, user_cpf):
 #========== menu observador ============#
 
 #*********
-def menuObservador(user_data, reclamaNew, reclamacoes, user_nome, user_cpf):
+def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
     pare = False
     while pare == False:
-        print("Olá, ", user_nome, "! Bem vind@ de volta. O que você deseja?\n1-Visualizar minhas informações pessoais\n2-Fazer uma reclamação\n3-Sair")
+        print("Menu do Observador da Água: \n1-Visualizar minhas informações pessoais\n2-Fazer uma reclamação\n3-Sair")
         fazer = int(input("Digite o numero da ação: "))
         if fazer == 1:
             visuInfoUser(user_data, user_cpf)
         elif fazer == 2:
-            Reclamacao(reclamaNew, reclamacoes, user_cpf)
+            Reclamacao(reclamaCod, reclamaNew, user_cpf)
         elif fazer == 3:
             pare = True
         else:
@@ -155,23 +155,21 @@ def saveReclamacoes(reclamaNew, lista_reclama):
     reclamaWrite = ""
     for reclama in reclamaNew:
         for info in reclama:
-            reclamaWrite += info + "\n"
+            reclamaWrite += str(info) + "\n"
     lista_reclama.write(reclamaWrite) # escrever as relcamacoes
     lista_reclama.close() # fechar arquivo
 
 #=========  usuarios ==========#
-def saveUsuarios(user_data, reclamaNew, lista_user_data):
+def saveUsuarios(user_data, user_cpf, reclamaNew, lista_user_data):
     # atualizar user_data por reclamacoes
-    for reclama in reclamaNew:
-        user_data[reclama[1]] = (user_data[reclama[1]][0], user_data[reclama[1]][1], user_data[reclama[1]][2],
-        user_data[reclama[1]][3], user_data[reclama[1]][4]+ reclama[0], user_data[reclama[1]][5]+1)
+    if len(reclamaNew) > 0 and user_cpf in user_data:
+        for reclama in reclamaNew:
+            user_data[reclama[1]] = (user_data[reclama[1]][0], user_data[reclama[1]][1], user_data[reclama[1]][2],
+            user_data[reclama[1]][3], str(user_data[reclama[1]][4]+ str(reclama[0])), str(user_data[reclama[1]][5]+1))
     # string write
     userDataWrite = ""
     for usuario in user_data:
-        userDataWrite += usuario + ";"
-        for info in user_data[usuario]:
-            userDataWrite += str(info) + ";"
-        userDataWrite += "\n"
+        userDataWrite += usuario + ";" + user_data[usuario][0] + ";" +user_data[usuario][1] + ";" +user_data[usuario][2] + ";" +user_data[usuario][3] + ";" +user_data[usuario][4] + ";" + str(user_data[usuario][5])+";\n"
     # salvar arquivo
     lista_user_data.write(userDataWrite)
     lista_user_data.close()

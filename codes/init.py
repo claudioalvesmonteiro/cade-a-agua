@@ -21,6 +21,7 @@ os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/")
 lista_user_data = open("data/usuariosData.txt", 'r+') # abrir arquivo
 user_data = lista_user_data.readlines() # ler linhas
 user_data = maniUserData(user_data) # dicionario de dados dos usuarios
+user_data_len = len(user_data)
 
 #================ reclamacoes ================#
 lista_reclama = open("data/reclamacoes.txt", 'r+') # abrir arquivo
@@ -35,7 +36,7 @@ reclamaNew = []
 #========= INICIO ==========#
 
 # mostrar o que eh a plataforma e input cadastro
-print("O 'Cadê a Água' é uma plataforma para realizar reclamações sobre o abastecimento de água em sua cidade.\nQualquer pessoa pode inserir as informações. Garantimos seu anonimato.")
+print("O 'Cadê a Água' é uma plataforma para realizar reclamações sobre o abastecimento de água em sua cidade. Qualquer pessoa pode inserir as informações. Garantimos seu anonimato.\n")
 print("Vocẽ já é cadastrado como um 'observador da água'?")
 cadastro = int(input("Se sim, digite 1, se não, digite 2: "))
 
@@ -49,8 +50,7 @@ while fluxo == False:
 
 #================ USUARIO SIMPLES ===============#
 if cadastro == 2:
-    print("Você deseja se cadastrar como um 'observador da água' ou apenas reportar um problema de abastecimento de água?")
-    print("Para conhecer os benefícios de ser um observador da água gratuitamente, acesse o link: ")
+    print("Você deseja se cadastrar como um 'observador da água' ou apenas reportar um problema de abastecimento de água? Para conhecer os benefícios de ser um observador da água gratuitamente, acesse o link: https://github.com/claudioalvesmonteiro/cade-a-agua \n")
     simples = int(input("Para se cadastrar digite 1, para apenas reportar um problema digite 2: "))
     # testa cadastro correto
     fluxo = False
@@ -60,7 +60,10 @@ if cadastro == 2:
         else:
             simples = int(input("Digite 1 para se cadastrar e 2 para apenas reportar um problema: "))
     if simples == 1:
-        cadastroObservador()
+        user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
+        cadastroObservador(user_data, user_cpf)
+        print("Parabéns! Agora você faz parte do grupo de observador de água")
+        cadastro = int(input("Se você deseja acessar as opções de observador digite 1. Caso queira sair, digite 2: "))
     if simples == 2:
         user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
         Reclamacao(reclamaCod, reclamaNew, user_cpf)
@@ -79,8 +82,8 @@ if cadastro == 1:
     # verifica senha e abre menuObservador
     quebraB = False
     while quebraB == False:
-        if user_senha == user_data[user_cpf][1]:
-            menuObservador(user_data, reclamaNew, reclamaCod, reclamaNew, user_cpf)
+        if user_senha == user_data[user_cpf][0]:
+            menuObservador(user_data, user_cpf, reclamaCod, reclamaNew)
             quebraB = True
         else:
             senhaUser = input("Senha incorreta. Digite novamente: ")
@@ -91,14 +94,12 @@ if cadastro == 1:
 #    menuDesenvolvedor()
 
 #========= SALVAR INFOS ==========#
+print(user_data)
 if reclamaNew != []:
     saveReclamacoes(reclamaNew, lista_reclama)
-    # usuarios
-    if user_cpf in user_data:
-        user_data_att = atualizarUser(user_data, reclamaNew, user_cpf)
-        user_data_att = plusTextUser(user_data_att)
-        lista_user_data.write(user_data_att)
-        lista_user_data.close() # fechar arquivo
+# usuarios
+if user_cpf in user_data:
+    saveUsuarios(user_data, user_cpf, reclamaNew, lista_user_data)
 
 #==== mensagem final ====#
 print("\nAgradecemos sua colaboração! Para saber mais sobre nosso trabalho acesse: https://observatoriosar.wordpress.com/")
