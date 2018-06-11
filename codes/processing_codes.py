@@ -133,41 +133,43 @@ def visuRanking(user_data):
     for usuario in listaOrd:
         print(usuario[0], ": ", usuario[1])
 
-visuRanking(user_data)
-
-# contar quantas no total (ultima rec + 1)
-# contar quantas vezes cada cpf se repete
-# parear com infos de usuarios
-# obsevadoresAnonimos = total - totalDosObservadores
-# lista contagem por nome do observador + obsevadoresAnonimos
-
 #========== Visualizar Infos Pessoais =========#
-
-#*********
 def visuInfoUser(user_data, user_cpf):
     print("\n", "CPF: ", user_cpf, "\n" ,"Nome de usuário: ", user_data[user_cpf][1], "\n" ,"Nível de acesso: ",  user_data[user_cpf][3], "\n",
     "Email: ", user_data[user_cpf][2], "\n" ,"Número de reclamações realizadas: ",  user_data[user_cpf][5], "\n")
 
-#========== baixar base de dados das Reclamacoes =========#
+#========== Baixar Dados das Reclamacoes =========#
+# formato CSV
+#+++++++++++
 
-#+++++++
+#=============== Atualizar Infos ================#
+
+#+++++++++++
 
 #========== menu observador ============#
-
-#*********
 def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
     pare = False
     while pare == False:
-        print("\nMenu do Observador da Água: \n1-Visualizar minhas informações pessoais\n2-Fazer uma reclamação\n3-Sair")
+        print("\nMenu do Observador da Água: \n1-Fazer uma reclamação\n2-Visualizar o ranking de observadores da Água\n3-Visualizar minhas informações pessoais\n4-Baixar dados das reclamações\n5-Sair")
         fazer = int(input("Digite o numero da ação: "))
         if fazer == 1:
-            visuInfoUser(user_data, user_cpf)
-        elif fazer == 2:
             Reclamacao(reclamaCod, reclamaNew, user_cpf)
-        elif fazer == 3:
+        elif fazer == 2:
+            visuRanking(user_data)
+        elif fazer ==3:
+            visuInfoUser(user_data, user_cpf)
+    #   elif fazer ==4:
+    #       baixarReclamacoes()
+        elif fazer == 5:
             pare = True
         else:
             print("Código de ação inválido")
+
+#======================== FUNCIONALIDADES DESENVOLVEDOR =======================#
+
+#=============== Remover Observador da Base ================#
+
+#+++++++++++
 
 #=========================== SALVAR INFOS ===========================#
 
