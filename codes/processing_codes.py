@@ -111,8 +111,30 @@ def plusTextUser(lista):
 #======================== FUNCIONALIDADES OBSERVADOR =======================#
 
 #========== Visualizar Ranking =========#
+def visuRanking(user_data):
+    rankLista = []
+    for usuario in user_data:
+        rankLista.append([user_data[usuario][1], user_data[usuario][5]])
+    # lista de contagem
+    listaCont = []
+    listaContB = []
+    for caso in rankLista:
+        listaCont.append(caso[1])
+        listaContB.append(caso[1])
+    # lista ordenada
+    listaOrd = []
+    while len(listaOrd) < len(rankLista):
+        maximo = max(listaContB)
+        print(maximo)
+        print(listaCont)
+        listaOrd.append(rankLista[listaCont.index(maximo)])
+        listaContB.remove(maximo)
+    print("Observadores     ", "Reclamações ")
+    for usuario in listaOrd:
+        print(usuario[0], ": ", usuario[1])
 
-#+++++++
+visuRanking(user_data)
+
 # contar quantas no total (ultima rec + 1)
 # contar quantas vezes cada cpf se repete
 # parear com infos de usuarios
@@ -123,9 +145,8 @@ def plusTextUser(lista):
 
 #*********
 def visuInfoUser(user_data, user_cpf):
-    infos = user_data[user_data.index(user_cpf):user_data.index(user_cpf)+7]
-    print("\n", "CPF: ", user_cpf, "\n" ,"Nome: ", infos[2], "\n" ,"Nível de acesso: ", infos[3], "\n",
-    "Email: ", infos[4], "\n" ,"Número de reclamações realizadas: ", infos[6], "\n")
+    print("\n", "CPF: ", user_cpf, "\n" ,"Nome de usuário: ", user_data[user_cpf][1], "\n" ,"Nível de acesso: ",  user_data[user_cpf][3], "\n",
+    "Email: ", user_data[user_cpf][2], "\n" ,"Número de reclamações realizadas: ",  user_data[user_cpf][5], "\n")
 
 #========== baixar base de dados das Reclamacoes =========#
 
@@ -137,7 +158,7 @@ def visuInfoUser(user_data, user_cpf):
 def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
     pare = False
     while pare == False:
-        print("Menu do Observador da Água: \n1-Visualizar minhas informações pessoais\n2-Fazer uma reclamação\n3-Sair")
+        print("\nMenu do Observador da Água: \n1-Visualizar minhas informações pessoais\n2-Fazer uma reclamação\n3-Sair")
         fazer = int(input("Digite o numero da ação: "))
         if fazer == 1:
             visuInfoUser(user_data, user_cpf)
