@@ -47,6 +47,25 @@ def maniReclamaData(reclamacoes):
         cont += 4
     return lista_reclama
 
+#====================== LOGIN ============================#
+def loginUsuario(user_data):
+    # verifica cpf
+    quebra = False
+    user_cpf = input("Olá! Digite seu CPF para entrar na sua conta: ")
+    while quebra == False:
+        if user_cpf in user_data:
+            user_senha = input("Agora insira sua senha: ")
+            quebra = True
+        else:
+            user_cpf = input("CPF não consta em nossa base :( digite novamente: ")
+    quebraB = False
+    while quebraB == False:
+        if user_senha != user_data[user_cpf][0]:
+            senhaUser = input("Senha incorreta. Digite novamente: ")
+        else:
+            quebraB = True
+    return user_cpf
+
 #======================= RECLAMACAO =====================#
 def Reclamacao(reclamaCod, reclamaNew, user_cpf):
     print("Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
@@ -125,41 +144,70 @@ def visuRanking(user_data):
     listaOrd = []
     while len(listaOrd) < len(rankLista):
         maximo = max(listaContB)
-        print(maximo)
-        print(listaCont)
         listaOrd.append(rankLista[listaCont.index(maximo)])
         listaContB.remove(maximo)
-    print("Observadores     ", "Reclamações ")
     for usuario in listaOrd:
-        print(usuario[0], ": ", usuario[1])
+        print(usuario[0], ": ", usuario[1], "Contribuições")
 
 #========== Visualizar Infos Pessoais =========#
 def visuInfoUser(user_data, user_cpf):
-    print("\n", "CPF: ", user_cpf, "\n" ,"Nome de usuário: ", user_data[user_cpf][1], "\n" ,"Nível de acesso: ",  user_data[user_cpf][3], "\n",
-    "Email: ", user_data[user_cpf][2], "\n" ,"Número de reclamações realizadas: ",  user_data[user_cpf][5], "\n")
+    print("\n", "CPF: ", user_cpf, "\n" ,
+    "Nome de Observador: ", user_data[user_cpf][1], "\n" ,
+    "Nível de acesso: ",  user_data[user_cpf][3], "\n",
+    "Email: ", user_data[user_cpf][2], "\n" ,
+    "Número de contribuições realizadas: ",  user_data[user_cpf][5], "\n")
 
 #========== Baixar Dados das Reclamacoes =========#
 # formato CSV
 #+++++++++++
 
 #=============== Atualizar Infos ================#
-
-#+++++++++++
+def atualizaInfos(user_data, user_cpf):
+    fluxo = True
+    while fluxo == True:
+        print("Qual das seguintes informações você deseja atualizar:\n1-Senha\n2-Nome de Observador\n3-Email\n4-Sair")
+        atualiza = int(input("Digite o número da ação: "))
+        # atualizar senha
+        if atualiza == 1:
+            senhaNova = input("Digite a nova senha: ")
+            senhaNovaB = input("Repita a senha, por favor: ")
+            # testar senhas
+            qubra = False
+            while quebra == False:
+                if senhaNova == senhaNovaB:
+                    qubra = True
+                else:
+                    print("Senhas não conferem")
+                    user_senha = input("Digite sua senha de acesso: ")
+                    user_senha2 = input("Repita a senha, por favor: ")
+            user_data[user_cpf] = (senhaNova, user_data[user_cpf][1], user_data[user_cpf][2], user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
+        # atualizar nome de usuario
+        elif atualiza == 2:
+            nomeNovo = input("Digite seu novo nome de observador: ")
+            user_data[user_cpf] = (user_data[user_cpf][0], nomeNovo, user_data[user_cpf][2], user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
+        # atualizar email
+        elif atualiza == 3:
+            emailNovo = input("Digite seu novo email: ")
+            user_data[user_cpf] = (user_data[user_cpf][0], user_data[user_cpf][1], emailNovo, user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
+        # sair
+        elif atualiza == $:
+            fluxo = False
 
 #========== menu observador ============#
 def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
     pare = False
     while pare == False:
-        print("\nMenu do Observador da Água: \n1-Fazer uma reclamação\n2-Visualizar o ranking de observadores da Água\n3-Visualizar minhas informações pessoais\n4-Baixar dados das reclamações\n5-Sair")
+        print("\nMenu do Observador da Água: \n1-Fazer uma reclamação\n2-Visualizar o ranking de observadores da Água\n3-Visualizar minhas informações pessoais\n4-Atualizar informações pessoais\n5-Sair")
         fazer = int(input("Digite o numero da ação: "))
+        # opcoes
         if fazer == 1:
             Reclamacao(reclamaCod, reclamaNew, user_cpf)
         elif fazer == 2:
             visuRanking(user_data)
-        elif fazer ==3:
+        elif fazer == 3:
             visuInfoUser(user_data, user_cpf)
-    #   elif fazer ==4:
-    #       baixarReclamacoes()
+        elif fazer == 4:
+            atualizaInfos(user_data, user_cpf)
         elif fazer == 5:
             pare = True
         else:
@@ -168,8 +216,47 @@ def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
 #======================== FUNCIONALIDADES DESENVOLVEDOR =======================#
 
 #=============== Remover Observador da Base ================#
+def removeObservador(user_data):
+    remove_cpf = input("Digite o número de CPF do Observador a ser retirado: ")
+    quebra = False
+    while quebra == False:
+        if remove_cpf in user_data:
+            user_data.pop(remove_cpf, None)
+            print("Observador removido com sucesso")
+            quebra = True
+        else:
+            remove_cpf = input("CPF não consta na base. Digite novamente: ")
 
-#+++++++++++
+#=============== Transformar Observador em Desenvolvedor ================#
+def transDesenvolvedor(user_data):
+    desenvolve_cpf = input("Digite o número de CPF do Observador a ser transformado em Desenvolvedor: ")
+    quebra = False
+    while quebra == False:
+        if desenvolve_cpf in user_data:
+            user_data[desenvolve_cpf] = (user_data[desenvolve_cpf][0], user_data[desenvolve_cpf][1], user_data[desenvolve_cpf][2], "desenvolvedor" , user_data[desenvolve_cpf][4], user_data[desenvolve_cpf][5])
+            print("Observador atualizado para Desenvolvedor")
+            quebra = True
+        else:
+            desenvolve_cpf = input("CPF não consta na base. Digite novamente: ")
+
+#====================== Menu Desenvolvedor ========================#
+def menuDesenvolvedor(user_data):
+    pare = False
+    valido = True
+    while pare == False:
+        print("\nMenu Desenvolvimento: \n1-Remover Observador dos usuários\n2-Transformar Observador em Desenvolvedor\n3-Sair")
+        if valido == True:
+            fazer = int(input("Digite o numero da ação: "))
+        # opcoes
+        if fazer == 1:
+            removeObservador(user_data)
+        elif fazer == 2:
+            transDesenvolvedor(user_data)
+        elif fazer == 3:
+            pare = True
+        else:
+            fazer = int(input("Digite um numero de ação válido: "))
+            valido = False
 
 #=========================== SALVAR INFOS ===========================#
 

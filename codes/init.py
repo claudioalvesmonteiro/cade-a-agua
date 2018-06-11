@@ -59,6 +59,7 @@ if cadastro == 2:
             fluxo = True
         else:
             simples = int(input("Digite 1 para se cadastrar e 2 para apenas reportar um problema: "))
+    # opcoes
     if simples == 1:
         user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
         cadastroObservador(user_data, user_cpf)
@@ -70,31 +71,19 @@ if cadastro == 2:
 
 #================ USUARIO OBSERVADOR ================#
 if cadastro == 1:
-    # verifica cpf
-    quebra = False
-    user_cpf = input("Olá! Digite seu CPF para entrar na sua conta: ")
-    while quebra == False:
-        if user_cpf in user_data:
-            user_senha = input("Agora insira sua senha: ")
-            quebra = True
-        else:
-            user_cpf = input("CPF não consta em nossa base :( digite novamente: ")
-    # verifica senha e abre menuObservador
-    quebraB = False
-    while quebraB == False:
-        if user_senha == user_data[user_cpf][0]:
-            menuObservador(user_data, user_cpf, reclamaCod, reclamaNew)
-            quebraB = True
-        else:
-            senhaUser = input("Senha incorreta. Digite novamente: ")
+    user_cpf = loginUsuario(user_data)
+    # Abre menuObservador
+    menuObservador(user_data, user_cpf, reclamaCod, reclamaNew)
 
 #================= USUARIO DESENVOLVEDOR ================#
-#+++++++
-#if cadastro == 0:
-#    menuDesenvolvedor()
+if cadastro == 0:
+    # verifica cpf e senha
+    user_cpf = loginUsuario(user_data)
+    if user_data[user_cpf][3] == "desenvolvedor":
+        # menuDesenvolvedor
+        fluxoDes = menuDesenvolvedor(user_data)
 
 #========= SALVAR INFOS ==========#
-print(user_data)
 if reclamaNew != []:
     saveReclamacoes(reclamaNew, lista_reclama)
 # usuarios
