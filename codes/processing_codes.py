@@ -15,6 +15,10 @@ Copyright(c) 2018 Claudio Luis Alves Monteiro
 
 #======== criar dict dados usuarios =========#
 def maniUserData(user_data):
+    ''' Remove o '\n' da string com as informacoes. Cria uma lista com as infos,
+    separadas por ';' e cria um dicionario de usuarios com o cpf como identificador e
+    informacoes como conteudo de uma tupla. Retorna o dicionario.
+    '''
     # remover "\n"
     user_data = removeCaracter(user_data, "\n")
     # criar lista das infos
@@ -37,6 +41,10 @@ def maniUserData(user_data):
 
 #======== criar lista dados reclamacoes ========#
 def maniReclamaData(reclamacoes):
+    ''' Remove o '\n' da string com as reclamacoes.
+    Cria uma lista de listas, cada uma armazenando as informacoes
+    de uma reclamacao.
+    '''
     # remover "\n"
     reclamacoes = removeCaracter(reclamacoes, "\n") # remover \#
     # criar lista de reclamacoes
@@ -49,6 +57,9 @@ def maniReclamaData(reclamacoes):
 
 #====================== LOGIN ============================#
 def loginUsuario(user_data):
+    ''' Verifica se o CPF e a senha constam devidamente na base.
+        Retora o CPF do usuario.
+    '''
     # verifica cpf
     quebra = False
     user_cpf = input("Olá! Digite seu CPF para entrar na sua conta: ")
@@ -68,6 +79,8 @@ def loginUsuario(user_data):
 
 #======================= RECLAMACAO =====================#
 def Reclamacao(reclamaCod, reclamaNew, user_cpf):
+    ''' Interacao com o usuario para armazenar uma nova reclamacao na base
+    '''
     print("Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
     reclama = input("Digite o número da reclamação: ")
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
@@ -77,6 +90,9 @@ def Reclamacao(reclamaCod, reclamaNew, user_cpf):
 
 #======================= CADASTRAR OBSERVADOR ===================#
 def cadastroObservador(user_data, user_cpf):
+    ''' Input das informacoes do usuario. Loop para testar compatibilidade de senhas inseridas.
+        Armazena o novo usuario na base de usuarios.
+    '''
     # input infos do usuario
     user_nome = input("Crie seu nome de usuário: ")
     user_email = input("Digite seu email: ")
@@ -99,6 +115,9 @@ def cadastroObservador(user_data, user_cpf):
 
 # retorna uma lista de objetos, sem um determinado caracter
 def removeCaracter(lista,caracter):
+    ''' Cria uma lista que recebe as informacoes da uma lista dada,
+        sem um determinado caracter.
+    '''
     listaFinal = []
     for objeto in lista:
         objetoMani = ""
@@ -110,16 +129,9 @@ def removeCaracter(lista,caracter):
 
 # acrescenta texto ao fim de cada objeto numa lista
 def plusText(lista):
-    stringLista = ""
-    for caso in lista:
-        casoNovo = ""
-        casoNovo = caso + "\n"
-        stringLista += casoNovo
-    return stringLista
-
-# ATENCAO DESENVLVER PARA user_data
-# acrescenta texto ao fim de cada objeto numa lista
-def plusTextUser(lista):
+    ''' Retorna uma lista com os objetos de uma dada lista,
+        acrescentado um '\n' ao final de cada objeto na lista.
+    '''
     stringLista = ""
     for caso in lista:
         casoNovo = ""
@@ -131,6 +143,10 @@ def plusTextUser(lista):
 
 #========== Visualizar Ranking =========#
 def visuRanking(user_data):
+    ''' Cria uma lista que recebe o nome de cada usuario e suas respectivas
+    contagens de reclamacoes. Cria uma lista que recebe os valores da lista anterior ordenado.
+    Dar um print na tela com os usuarios e o numero de contribuicoes, ordenado do maior para o menor
+    '''
     rankLista = []
     for usuario in user_data:
         rankLista.append([user_data[usuario][1], user_data[usuario][5]])
@@ -163,6 +179,10 @@ def visuInfoUser(user_data, user_cpf):
 
 #=============== Atualizar Infos ================#
 def atualizaInfos(user_data, user_cpf):
+    ''' Dar um print das opcoes disponíveis e pede input da opcao selecionada.
+    Opcao 1 Atualiza as senhas do usuario na base. Opcao 2 atualiza o nome de usuarios
+    Opcao 3 atualiza o email do usuario e opcao 4 sai da funcao.
+    '''
     fluxo = True
     while fluxo == True:
         print("Qual das seguintes informações você deseja atualizar:\n1-Senha\n2-Nome de Observador\n3-Email\n4-Sair")
@@ -190,11 +210,17 @@ def atualizaInfos(user_data, user_cpf):
             emailNovo = input("Digite seu novo email: ")
             user_data[user_cpf] = (user_data[user_cpf][0], user_data[user_cpf][1], emailNovo, user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
         # sair
-        elif atualiza == $:
+        elif atualiza == 4:
             fluxo = False
 
 #========== menu observador ============#
 def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
+    ''' Menu do usuario Observador. Dar print na tela das opcoes.
+    Opcao1 chama a funcao de reclamacao. Opcao 2 chama a opcao de
+    visualizar o Ranking de Observadores. Opcao 3 chama funcao para
+    visualizar informacoes do usuario. Opcao 4 chama funcao para
+    atualizar informacoes do usuario e Opcao 5 sai da funcao.
+    '''
     pare = False
     while pare == False:
         print("\nMenu do Observador da Água: \n1-Fazer uma reclamação\n2-Visualizar o ranking de observadores da Água\n3-Visualizar minhas informações pessoais\n4-Atualizar informações pessoais\n5-Sair")
@@ -217,6 +243,9 @@ def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
 
 #=============== Remover Observador da Base ================#
 def removeObservador(user_data):
+    ''' Input do CPF do usuario a ser removido da base.
+        Verifica se CPF exite na base. Remove usuario do CPF dado, da base de usuarios.
+    '''
     remove_cpf = input("Digite o número de CPF do Observador a ser retirado: ")
     quebra = False
     while quebra == False:
@@ -229,6 +258,9 @@ def removeObservador(user_data):
 
 #=============== Transformar Observador em Desenvolvedor ================#
 def transDesenvolvedor(user_data):
+    ''' Input do CPF de um observador a ser transformado em desenvolvedor.
+        Transforma o tipo de de usuario para desenvolvedor.
+    '''
     desenvolve_cpf = input("Digite o número de CPF do Observador a ser transformado em Desenvolvedor: ")
     quebra = False
     while quebra == False:
@@ -241,6 +273,10 @@ def transDesenvolvedor(user_data):
 
 #====================== Menu Desenvolvedor ========================#
 def menuDesenvolvedor(user_data):
+    ''' Menu Desenvolvedor. Dar print das opcoes na tela. Input das opcoes disponiveis.
+        Opcao 1 chama funcao para remover observador. Opcao 2 transforma observador em desenvolvedor.
+        Opcao 3 encerra a funcao.
+    '''
     pare = False
     valido = True
     while pare == False:
@@ -262,6 +298,9 @@ def menuDesenvolvedor(user_data):
 
 #============== reclamacoes =============#
 def saveReclamacoes(reclamaNew, lista_reclama):
+    ''' Transforma a lista de reclamacoes em uma string com '\n' após cada objeto.
+        Escreve o resultado no arquivo e fecha o arquivo.
+    '''
     reclamaWrite = ""
     for reclama in reclamaNew:
         for info in reclama:
@@ -271,6 +310,10 @@ def saveReclamacoes(reclamaNew, lista_reclama):
 
 #=========  usuarios ==========#
 def saveUsuarios(user_data, user_cpf, reclamaNew, lista_user_data):
+    ''' Verifica se infos dos usuarios precisam serem atualizadas,
+        com base em novas reclamacoes. Cria uma string a ser escrita
+        em formato de leitura .CSV. Escreve string no arquivo e fecha o mesmo.
+    '''
     # atualizar user_data por reclamacoes
     if len(reclamaNew) > 0 and user_cpf in user_data:
         for reclama in reclamaNew:
