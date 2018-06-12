@@ -85,7 +85,7 @@ def Reclamacao(reclamaCod, reclamaNew, user_cpf):
     reclama = input("Digite o número da reclamação: ")
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
     codReclama = reclamaCod + 1 # codigo da ultima reclamacao registrada + 1
-    rec = [codReclama, user_cpf, reclama, localiza]
+    rec = [str(codReclama), user_cpf, reclama, localiza]
     reclamaNew.append(rec)
 
 #======================= CADASTRAR OBSERVADOR ===================#
@@ -314,29 +314,26 @@ def menuDesenvolvedor(user_data):
 
 #=========================== SALVAR INFOS ===========================#
 
-def criptoSave(reclamaWrite):
-    # abri arquivo com chave publica
-    chave_ublica = open("chaves/chavePublica.txt")
-    chavesPub = chavePublica.readlines()
-    # criprografar string
-    criptoReclama = ""
-    for caracter in reclamaWrite:
-        criptoCaracter = (ord(caracter)^int(chavesPub[0])) % int(chavesPub[1])
-        criptoReclama += str(y)
-
-
 #============== reclamacoes =============#
 def saveReclamacoes(reclamaNew, lista_reclama):
-    ''' Transforma a lista de reclamacoes em uma string com '\n' após cada objeto.
-        Escreve o resultado no arquivo e fecha o arquivo.
     '''
-    reclamaWrite = ""
+    '''
+    print(reclamaNew)
+    # abrir chavePublica
+    chavePublica = open("chaves/chavePublica.txt")
+    chavesPub = chavePublica.readlines()
+    chavePublica.close()
+    chavesPub = removeCaracter(chavesPub,"\n")
+    criptoReclama = ""
     for reclama in reclamaNew:
         for info in reclama:
-            reclamaWrite += str(info) + "\n"
-    criptoReclama = criptoSave(reclamaWrite)
+            for caracter in info:
+                criptoCaracter = str((ord(caracter)^int(chavesPub[0])) % int(chavesPub[1]))
+                criptoReclama += criptoCaracter
+            criptoReclama += "\n"
     lista_reclama.write(criptoReclama) # escrever as relcamacoes
     lista_reclama.close() # fechar arquivo
+
 
 #=========  usuarios ==========#
 def saveUsuarios(user_data, user_cpf, reclamaNew, lista_user_data):
