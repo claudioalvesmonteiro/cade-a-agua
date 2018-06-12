@@ -18,13 +18,13 @@ from processing_codes import *
 os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/")
 
 #================= usuarios ==================#
-lista_user_data = open("data/usuariosData.txt", 'r+') # abrir arquivo
+lista_user_data = open("data/usuarios.txt", 'r+') # abrir arquivo
 user_data = lista_user_data.readlines() # ler linhas
 user_data = maniUserData(user_data) # dicionario de dados dos usuarios
 user_data_len = len(user_data)
 
 #================ reclamacoes ================#
-lista_reclama = open("data/reclamacoes.txt", 'r+') # abrir arquivo
+lista_reclama = open("data/elementos.txt", 'r+') # abrir arquivo
 reclamacoes = lista_reclama.readlines() # ler linhas
 reclamacoes = maniReclamaData(reclamacoes) # criar dicionario de reclamacoes
 
@@ -73,7 +73,7 @@ if cadastro == 2:
 if cadastro == 1:
     user_cpf = loginUsuario(user_data)
     # Abre menuObservador
-    menuObservador(user_data, user_cpf, reclamaCod, reclamaNew)
+    menuObservador(user_data, user_cpf, reclamaCod, reclamaNew, reclamacoes)
 
 #================= USUARIO DESENVOLVEDOR ================#
 if cadastro == 0:

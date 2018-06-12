@@ -72,7 +72,7 @@ def loginUsuario(user_data):
     quebraB = False
     while quebraB == False:
         if user_senha != user_data[user_cpf][0]:
-            senhaUser = input("Senha incorreta. Digite novamente: ")
+            user_senha = input("Senha incorreta. Digite novamente: ")
         else:
             quebraB = True
     return user_cpf
@@ -162,6 +162,7 @@ def visuRanking(user_data):
         maximo = max(listaContB)
         listaOrd.append(rankLista[listaCont.index(maximo)])
         listaContB.remove(maximo)
+    print("\n")
     for usuario in listaOrd:
         print(usuario[0], ": ", usuario[1], "Contribuições")
 
@@ -174,8 +175,19 @@ def visuInfoUser(user_data, user_cpf):
     "Número de contribuições realizadas: ",  user_data[user_cpf][5], "\n")
 
 #========== Baixar Dados das Reclamacoes =========#
-# formato CSV
-#+++++++++++
+def downloadReclamacoes(reclamacoes):
+    # criar string a ser escrita no aquivo
+    dataReclama = "codigo_reclamacao;tipo_reclamacao;endereco_reclamacao;"
+    for reclama in reclamacoes:
+        for info in reclama:
+            if info != reclama[1]:
+                dataReclama += info + ";"
+        dataReclama += "\n"
+    # criar base de reclamacoes
+    base_reclama = open("data/base_reclamacoes.csv", 'w') # abrir arquivo
+    base_reclama.write(dataReclama)
+    base_reclama.close()
+    print("Dados das reclamações baixados!")
 
 #=============== Atualizar Infos ================#
 def atualizaInfos(user_data, user_cpf):
@@ -201,29 +213,33 @@ def atualizaInfos(user_data, user_cpf):
                     user_senha = input("Digite sua senha de acesso: ")
                     user_senha2 = input("Repita a senha, por favor: ")
             user_data[user_cpf] = (senhaNova, user_data[user_cpf][1], user_data[user_cpf][2], user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
+            print("Senha atualizada!")
         # atualizar nome de usuario
         elif atualiza == 2:
             nomeNovo = input("Digite seu novo nome de observador: ")
             user_data[user_cpf] = (user_data[user_cpf][0], nomeNovo, user_data[user_cpf][2], user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
+            print("Nome de usuário atualizado!")
         # atualizar email
         elif atualiza == 3:
             emailNovo = input("Digite seu novo email: ")
             user_data[user_cpf] = (user_data[user_cpf][0], user_data[user_cpf][1], emailNovo, user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
+            print("Email atualizado!")
         # sair
         elif atualiza == 4:
             fluxo = False
 
 #========== menu observador ============#
-def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
+def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew, reclamacoes):
     ''' Menu do usuario Observador. Dar print na tela das opcoes.
     Opcao1 chama a funcao de reclamacao. Opcao 2 chama a opcao de
     visualizar o Ranking de Observadores. Opcao 3 chama funcao para
     visualizar informacoes do usuario. Opcao 4 chama funcao para
-    atualizar informacoes do usuario e Opcao 5 sai da funcao.
+    atualizar informacoes do usuario e Opcao 5 salva as reclamacoes em formato
+    de planilha .CSV e opcao 6 encerra a funcao.
     '''
     pare = False
     while pare == False:
-        print("\nMenu do Observador da Água: \n1-Fazer uma reclamação\n2-Visualizar o ranking de observadores da Água\n3-Visualizar minhas informações pessoais\n4-Atualizar informações pessoais\n5-Sair")
+        print("\nMenu do Observador da Água: \n1-Fazer uma reclamação\n2-Visualizar o ranking de observadores da Água\n3-Visualizar minhas informações pessoais\n4-Atualizar informações pessoais\n5-Baixar dados de reclamacoes\n6-Sair")
         fazer = int(input("Digite o numero da ação: "))
         # opcoes
         if fazer == 1:
@@ -235,6 +251,8 @@ def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew):
         elif fazer == 4:
             atualizaInfos(user_data, user_cpf)
         elif fazer == 5:
+            downloadReclamacoes(reclamacoes)
+        elif fazer == 6:
             pare = True
         else:
             print("Código de ação inválido")
@@ -296,6 +314,17 @@ def menuDesenvolvedor(user_data):
 
 #=========================== SALVAR INFOS ===========================#
 
+def criptoSave(reclamaWrite):
+    # abri arquivo com chave publica
+    chave_ublica = open("chaves/chavePublica.txt")
+    chavesPub = chavePublica.readlines()
+    # criprografar string
+    criptoReclama = ""
+    for caracter in reclamaWrite:
+        criptoCaracter = (ord(caracter)^int(chavesPub[0])) % int(chavesPub[1])
+        criptoReclama += str(y)
+
+
 #============== reclamacoes =============#
 def saveReclamacoes(reclamaNew, lista_reclama):
     ''' Transforma a lista de reclamacoes em uma string com '\n' após cada objeto.
@@ -305,7 +334,8 @@ def saveReclamacoes(reclamaNew, lista_reclama):
     for reclama in reclamaNew:
         for info in reclama:
             reclamaWrite += str(info) + "\n"
-    lista_reclama.write(reclamaWrite) # escrever as relcamacoes
+    criptoReclama = criptoSave(reclamaWrite)
+    lista_reclama.write(criptoReclama) # escrever as relcamacoes
     lista_reclama.close() # fechar arquivo
 
 #=========  usuarios ==========#
@@ -323,6 +353,7 @@ def saveUsuarios(user_data, user_cpf, reclamaNew, lista_user_data):
     userDataWrite = ""
     for usuario in user_data:
         userDataWrite += usuario + ";" + user_data[usuario][0] + ";" +user_data[usuario][1] + ";" +user_data[usuario][2] + ";" +user_data[usuario][3] + ";" +user_data[usuario][4] + ";" + str(user_data[usuario][5])+";\n"
+
     # salvar arquivo
     lista_user_data.write(userDataWrite)
     lista_user_data.close()
