@@ -11,7 +11,7 @@ Data: 2018-05-21
 Copyright(c) 2018 Claudio Luis Alves Monteiro
 """
 
-#====================== PROCESSANDO AS INFOS =====================#
+#====================== PROCESSANDO AS INFOS ======================#
 
 #======== criar dict dados usuarios =========#
 def maniUserData(user_data):
@@ -40,13 +40,35 @@ def maniUserData(user_data):
     return dict_user
 
 #======== criar lista dados reclamacoes ========#
-def maniReclamaData(reclamacoes):
+
+# descriptografar
+def descriptoOpen(reclama_data):
+    chave_privada = open("chaves/chavePrivada.txt", 'r')
+    chavePrivada = chave_privada.readlines()
+    chavePrivada = removeCaracter(chavePrivada, "\n")
+    print(chavePrivada)
+    reclamacoes = []
+    for info in reclama_data:
+        informacao = ""
+        for caracter in info:
+            print(caracter)
+            x = chr((int(caracter)^int(chavePrivada[0])) % int(chavePrivada[1]))
+            informacao += x
+        reclamacoes.append(informacao)
+    return reclamacoes
+
+def maniReclamaData(reclama_data, criptografia):
     ''' Remove o '\n' da string com as reclamacoes.
-    Cria uma lista de listas, cada uma armazenando as informacoes
-    de uma reclamacao.
+        Cria uma lista de listas, cada uma armazenando as informacoes
+        de uma reclamacao.
     '''
     # remover "\n"
-    reclamacoes = removeCaracter(reclamacoes, "\n") # remover \#
+    reclama_data = removeCaracter(reclama_data, "\n") # remover \#
+    # descriptografar
+    if criptografia = True:
+        reclamacoes = descriptoOpen(reclama_data)
+    elif criptografia = False:
+        reclamacoes = reclama_data
     # criar lista de reclamacoes
     cont = 0
     lista_reclama = []
@@ -192,8 +214,8 @@ def downloadReclamacoes(reclamacoes):
 #=============== Atualizar Infos ================#
 def atualizaInfos(user_data, user_cpf):
     ''' Dar um print das opcoes disponíveis e pede input da opcao selecionada.
-    Opcao 1 Atualiza as senhas do usuario na base. Opcao 2 atualiza o nome de usuarios
-    Opcao 3 atualiza o email do usuario e opcao 4 sai da funcao.
+        Opcao 1 Atualiza as senhas do usuario na base. Opcao 2 atualiza o nome de usuarios
+        Opcao 3 atualiza o email do usuario e opcao 4 sai da funcao.
     '''
     fluxo = True
     while fluxo == True:
@@ -231,11 +253,11 @@ def atualizaInfos(user_data, user_cpf):
 #========== menu observador ============#
 def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew, reclamacoes):
     ''' Menu do usuario Observador. Dar print na tela das opcoes.
-    Opcao1 chama a funcao de reclamacao. Opcao 2 chama a opcao de
-    visualizar o Ranking de Observadores. Opcao 3 chama funcao para
-    visualizar informacoes do usuario. Opcao 4 chama funcao para
-    atualizar informacoes do usuario e Opcao 5 salva as reclamacoes em formato
-    de planilha .CSV e opcao 6 encerra a funcao.
+        Opcao1 chama a funcao de reclamacao. Opcao 2 chama a opcao de
+        visualizar o Ranking de Observadores. Opcao 3 chama funcao para
+        visualizar informacoes do usuario. Opcao 4 chama funcao para
+        atualizar informacoes do usuario e Opcao 5 salva as reclamacoes em formato
+        de planilha .CSV e opcao 6 encerra a funcao.
     '''
     pare = False
     while pare == False:
@@ -314,29 +336,52 @@ def menuDesenvolvedor(user_data):
 
 #=========================== SALVAR INFOS ===========================#
 
-#============== reclamacoes =============#
-def saveReclamacoes(reclamaNew, lista_reclama):
+#====================== reclamacoes =====================#
+
+# criptografia
+def encriptSave(reclamaNew):
+    ''' Abre chave publica. Executa calculo de criptografia RAS
+        para cada caracter da lista reclamaNew. Retorna lista de
+        reclamacoes criptografada.
     '''
-    '''
-    print(reclamaNew)
-    # abrir chavePublica
+    # abrir chaves
     chavePublica = open("chaves/chavePublica.txt")
     chavesPub = chavePublica.readlines()
     chavePublica.close()
     chavesPub = removeCaracter(chavesPub,"\n")
-    criptoReclama = ""
+    # executar calculo
+    criptoReclamacoes =[]
     for reclama in reclamaNew:
+        reclamaEncript = []
         for info in reclama:
+            infoEncript = ""
             for caracter in info:
-                criptoCaracter = str((ord(caracter)^int(chavesPub[0])) % int(chavesPub[1]))
-                criptoReclama += criptoCaracter
-            criptoReclama += "\n"
-    lista_reclama.write(criptoReclama) # escrever as relcamacoes
-    lista_reclama.close() # fechar arquivo
+                criptoCaracter = str(ord(caracter)^int(chavesPub[0]) % int(chavesPub[1]))
+                infoEncript += criptoCaracter
+            reclamaEncript.append(infoEncript)
+        criptoReclamacoes.append(reclamaEncript)
+
+# escrever reclamacoes
+def stringReclamacoes(reclamaNew, criptografia):
+    ''' Transforma lista de novas reclamacoes em string e salva no
+        arquivo de reclamacoes de forma criptografada ou não.
+    '''
+    # criptografia
+    if criptografia = True:
+        lista_reclama = encriptSave(reclamaNew)
+    elif criptografia = False:
+        lista_reclama = reclamaNew
+    # criar string
+    stringReclamacao = ""
+    for reclamacao in lista_reclama:
+        for info in reclamacao:
+            stringReclamacao += info + "\n"
+    return stringReclamacao
+
 
 
 #=========  usuarios ==========#
-def saveUsuarios(user_data, user_cpf, reclamaNew, lista_user_data):
+def stringUsuarios(user_data, user_cpf, reclamaNew, lista_user_data, criptografia):
     ''' Verifica se infos dos usuarios precisam serem atualizadas,
         com base em novas reclamacoes. Cria uma string a ser escrita
         em formato de leitura .CSV. Escreve string no arquivo e fecha o mesmo.
@@ -350,7 +395,4 @@ def saveUsuarios(user_data, user_cpf, reclamaNew, lista_user_data):
     userDataWrite = ""
     for usuario in user_data:
         userDataWrite += usuario + ";" + user_data[usuario][0] + ";" +user_data[usuario][1] + ";" +user_data[usuario][2] + ";" +user_data[usuario][3] + ";" +user_data[usuario][4] + ";" + str(user_data[usuario][5])+";\n"
-
-    # salvar arquivo
-    lista_user_data.write(userDataWrite)
-    lista_user_data.close()
+    return userDataWrite

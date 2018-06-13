@@ -11,29 +11,49 @@ Data: 2018-05-21
 Copyright(c) 2018 Claudio Luis Alves Monteiro
 """
 
-#============== funcionalidades ==============#
+#============== importar funcionalidades ==============#
 import os
 os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/codes")
 from processing_codes import *
 os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/")
 
-#================= usuarios ==================#
-lista_user_data = open("data/usuarios.txt", 'r+') # abrir arquivo
-user_data = lista_user_data.readlines() # ler linhas
-user_data = maniUserData(user_data) # dicionario de dados dos usuarios
-user_data_len = len(user_data)
+#====================== IMPORTAR ARQUIVOS =======================#
 
-#================ reclamacoes ================#
-lista_reclama = open("data/elementos.txt", 'r+') # abrir arquivo
-reclamacoes = lista_reclama.readlines() # ler linhas
-reclamacoes = maniReclamaData(reclamacoes) # criar dicionario de reclamacoes
+# fluxo de criptografia
+criptografia = False
+
+#=========== criptografados ==========#
+if criptografia == True:
+    # usuarios
+    cripto_user_arq = open("data/criptoUsuarios.txt", 'r+') # abrir arquivo
+    cripto_user_data = cripto_user_arq.readlines() # ler linhas
+    user_data = maniUserData(cripto_user_data, criptografia) # dicionario de dados dos usuarios
+    # reclamacoes
+    cripto_reclama_arq = open("data/criptoElementos.txt", 'r+') # abrir arquivo
+    cripto_reclama_data = cripto_reclama_arq.readlines() # ler linhas
+    user_data = maniReclamaData(cripto_reclama_data, criptografia) # dicionario de dados dos usuarios
+
+#================ nao criptografados ================#
+if criptografia == False:
+    # usuarios
+    user_arq = open("data/usuarios.txt", 'r+') # abrir arquivo
+    user_data = user_arq.readlines() # ler linhas
+    user_data = maniUserData(user_data, criptografia) # dicionario de dados dos usuarios
+    # reclamacoes
+    reclama_arq = open("data/elementos.txt", 'r+') # abrir arquivo
+    reclama_data = reclama_arq.readlines() # ler linhas
+    reclama_data = maniReclamaData(reclama_data, criptografia) # dicionario de dados dos usuarios
+
 
 # codigo ultima reclamacao
 reclamaCod = int(reclamacoes[len(reclamacoes)-1][0])
 # novas reclamacoes
 reclamaNew = []
+# len user data
+user_data_len = len(user_data)
 
-#========= INICIO ==========#
+
+#===================== INICIO =====================#
 
 # mostrar o que eh a plataforma e input cadastro
 print("O 'Cadê a Água' é uma plataforma para realizar reclamações sobre o abastecimento de água em sua cidade. Qualquer pessoa pode inserir as informações. Garantimos seu anonimato.\n")
@@ -83,12 +103,31 @@ if cadastro == 0:
         # menuDesenvolvedor
         fluxoDes = menuDesenvolvedor(user_data)
 
-#========= SALVAR INFOS ==========#
-if reclamaNew != []:
-    saveReclamacoes(reclamaNew, lista_reclama)
-# usuarios
-if user_cpf in user_data:
-    saveUsuarios(user_data, user_cpf, reclamaNew, lista_user_data)
+#===================== SALVAR ARQUIVOS ======================#
+
+#============== criptografados ===============#
+if criptografia == True:
+    # reclamacoes
+    if reclamaNew != []:
+        string_reclama = stringReclamacoes(reclamaNew, criptografia)
+        cripto_reclama_arq.write(string_reclama)
+        cripto_reclama_arq.close()
+    if user_cpf in user_data:
+        string_user = saveUsuarios(user_data, user_cpf, reclamaNew, criptografia)
+        cripto_user_arq.write(string_user)
+        cripto_user_arq.close()
+
+#============== nao criptografados ================#
+if criptografia == False:
+    # reclamacoes
+    if reclamaNew != []:
+        string_reclama = stringReclamacoes(reclamaNew, criptografia)
+        reclama_arq.write(string_reclama)
+        reclama_arq.close()
+    if user_cpf in user_data:
+        string_user = stringUsuarios(user_data, user_cpf, reclamaNew, criptografia)
+        user_arq.write(string_user)
+        user_arq.close()
 
 #==== mensagem final ====#
 print("\nAgradecemos sua colaboração! Para saber mais sobre nosso trabalho acesse: https://observatoriosar.wordpress.com/")
