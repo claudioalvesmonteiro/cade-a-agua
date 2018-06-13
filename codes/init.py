@@ -1,15 +1,16 @@
 """
 UNIVERSIDADE FEDERAL DE PERNAMBUCO (UFPE) (https://www.ufpe.br/)
-CENTRO DE FILOSOFIA E CIENCIAS HUMANAS
-Graduando em Ciencia Politica
 IF968 - Programacao I
 
 Autor(a): Claudio Luis Alves Monteiro
 Email: claudiomonteirol.a@gmail.com
-Data: 2018-05-21
+Data: 2018.1
 
 Copyright(c) 2018 Claudio Luis Alves Monteiro
 """
+
+# fluxo de criptografia
+criptografia = False
 
 #============== importar funcionalidades ==============#
 import os
@@ -18,9 +19,6 @@ from processing_codes import *
 os.chdir("/home/pacha/Documents/git_projects/cade-a-agua/")
 
 #====================== IMPORTAR ARQUIVOS =======================#
-
-# fluxo de criptografia
-criptografia = False
 
 #=========== criptografados ==========#
 if criptografia == True:
@@ -31,7 +29,7 @@ if criptografia == True:
     # reclamacoes
     cripto_reclama_arq = open("data/criptoElementos.txt", 'r+') # abrir arquivo
     cripto_reclama_data = cripto_reclama_arq.readlines() # ler linhas
-    user_data = maniReclamaData(cripto_reclama_data, criptografia) # dicionario de dados dos usuarios
+    reclamacoes = maniReclamaData(cripto_reclama_data, criptografia) # dicionario de dados dos usuarios
 
 #================ nao criptografados ================#
 if criptografia == False:
@@ -42,8 +40,7 @@ if criptografia == False:
     # reclamacoes
     reclama_arq = open("data/elementos.txt", 'r+') # abrir arquivo
     reclama_data = reclama_arq.readlines() # ler linhas
-    reclama_data = maniReclamaData(reclama_data, criptografia) # dicionario de dados dos usuarios
-
+    reclamacoes = maniReclamaData(reclama_data, criptografia) # dicionario de dados dos usuarios
 
 # codigo ultima reclamacao
 reclamaCod = int(reclamacoes[len(reclamacoes)-1][0])
@@ -51,7 +48,6 @@ reclamaCod = int(reclamacoes[len(reclamacoes)-1][0])
 reclamaNew = []
 # len user data
 user_data_len = len(user_data)
-
 
 #===================== INICIO =====================#
 
@@ -70,7 +66,7 @@ while fluxo == False:
 
 #================ USUARIO SIMPLES ===============#
 if cadastro == 2:
-    print("Você deseja se cadastrar como um 'observador da água' ou apenas reportar um problema de abastecimento de água? Para conhecer os benefícios de ser um observador da água gratuitamente, acesse o link: https://github.com/claudioalvesmonteiro/cade-a-agua \n")
+    print("Você deseja se cadastrar como um 'Observador da Água' ou apenas reportar um problema de abastecimento de água? Para conhecer os benefícios de ser um observador da água gratuitamente, acesse o link: https://github.com/claudioalvesmonteiro/cade-a-agua \n")
     simples = int(input("Para se cadastrar digite 1, para apenas reportar um problema digite 2: "))
     # testa cadastro correto
     fluxo = False
@@ -83,7 +79,7 @@ if cadastro == 2:
     if simples == 1:
         user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
         cadastroObservador(user_data, user_cpf)
-        print("Parabéns! Agora você faz parte do grupo de observador de água")
+        print("Parabéns! Agora você faz parte do grupo de Observadores de Água!")
         cadastro = int(input("Se você deseja acessar as opções de observador digite 1. Caso queira sair, digite 2: "))
     if simples == 2:
         user_cpf = input("Digite seu CPF (mantemos sigilo total): ")
@@ -113,7 +109,8 @@ if criptografia == True:
         cripto_reclama_arq.write(string_reclama)
         cripto_reclama_arq.close()
     if user_cpf in user_data:
-        string_user = saveUsuarios(user_data, user_cpf, reclamaNew, criptografia)
+        string_user = stringUsuarios(user_data, user_cpf, reclamaNew, criptografia)
+        cripto_user_arq = open("data/criptoUsuarios.txt", 'w') # abrir arquivo
         cripto_user_arq.write(string_user)
         cripto_user_arq.close()
 
@@ -126,6 +123,7 @@ if criptografia == False:
         reclama_arq.close()
     if user_cpf in user_data:
         string_user = stringUsuarios(user_data, user_cpf, reclamaNew, criptografia)
+        user_arq = open("data/usuarios.txt", 'w') # abrir arquivo
         user_arq.write(string_user)
         user_arq.close()
 

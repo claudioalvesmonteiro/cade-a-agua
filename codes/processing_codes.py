@@ -13,49 +13,72 @@ Copyright(c) 2018 Claudio Luis Alves Monteiro
 
 #====================== PROCESSANDO AS INFOS ======================#
 
+# descriptografar
+def descriptoOpen(lista):
+    ''' Importa chaves para descriptografar. Cria uma lista de listas com os
+        caracteres. Aplica calculo de descript para cada codigo e retorna lista
+        com as infomacoes.
+    '''
+    # abrir chaves
+    chave_privada = open("chaves/chavePrivada.txt", 'r')
+    chavePrivada = chave_privada.readlines()
+    chavePrivada = removeCaracter(chavePrivada, "\n")
+    chave_privada.close()
+    # descriptografar
+    lista_descript = []
+    for info in listacaracter:
+        informacao = ""
+        for caracter in info:
+            x = chr((int(caracter)^int(chavePrivada[0])) % int(chavePrivada[1]))
+            informacao += x
+        lista_descript.append(informacao)
+    return lista_descript
+
 #======== criar dict dados usuarios =========#
-def maniUserData(user_data):
+def maniUserData(user_data, criptografia):
     ''' Remove o '\n' da string com as informacoes. Cria uma lista com as infos,
-    separadas por ';' e cria um dicionario de usuarios com o cpf como identificador e
-    informacoes como conteudo de uma tupla. Retorna o dicionario.
+        separadas por ';' e cria um dicionario de usuarios com o cpf como identificador e
+        informacoes como conteudo de uma tupla. Retorna o dicionario.
     '''
     # remover "\n"
     user_data = removeCaracter(user_data, "\n")
-    # criar lista das infos
-    listaUser = []
-    for info in user_data:
-        usuarioInfo = ""
-        for caracter in info:
-            if caracter == ";":
-                listaUser.append(usuarioInfo)
-                usuarioInfo = ""
-            else:
-                usuarioInfo += caracter
+    # descriptografar
+    if criptografia == True:
+        # criar lista de caracteres
+        listacaracter = []
+        for info in user_data:
+            infoLista = []
+            codigocaracter = ""
+            for caracter in info:
+                if caracter == "-":
+                    infoLista.append(codigocaracter)
+                    codigocaracter = ""
+                elif caracter == ";":
+                    listacaracter.append(infoLista)
+                    infoLista = []
+                else:
+                    codigocaracter += caracter
+        usuario_lista = descriptoOpen(listacaracter)
+    elif criptografia == False:
+        # criar lista das infos
+        usuario_lista = []
+        for info in user_data:
+            usuarioInfo = ""
+            for caracter in info:
+                if caracter == ";":
+                    usuario_lista.append(usuarioInfo)
+                    usuarioInfo = ""
+                else:
+                    usuarioInfo += caracter
     # criar dicionario das infos
     dict_user = {}
-    cont = 7
-    while cont < len(listaUser):
-        dict_user[listaUser[cont]] = (listaUser[cont+1],listaUser[cont+2],listaUser[cont+3], listaUser[cont+4],listaUser[cont+5], int(listaUser[cont+6]))
+    cont = 0
+    while cont < len(usuario_lista):
+        dict_user[usuario_lista[cont]] = (usuario_lista[cont+1],usuario_lista[cont+2],usuario_lista[cont+3], usuario_lista[cont+4],usuario_lista[cont+5], int(usuario_lista[cont+6]))
         cont += 7
     return dict_user
 
 #======== criar lista dados reclamacoes ========#
-
-# descriptografar
-def descriptoOpen(reclama_data):
-    chave_privada = open("chaves/chavePrivada.txt", 'r')
-    chavePrivada = chave_privada.readlines()
-    chavePrivada = removeCaracter(chavePrivada, "\n")
-    print(chavePrivada)
-    reclamacoes = []
-    for info in reclama_data:
-        informacao = ""
-        for caracter in info:
-            print(caracter)
-            x = chr((int(caracter)^int(chavePrivada[0])) % int(chavePrivada[1]))
-            informacao += x
-        reclamacoes.append(informacao)
-    return reclamacoes
 
 def maniReclamaData(reclama_data, criptografia):
     ''' Remove o '\n' da string com as reclamacoes.
@@ -65,9 +88,21 @@ def maniReclamaData(reclama_data, criptografia):
     # remover "\n"
     reclama_data = removeCaracter(reclama_data, "\n") # remover \#
     # descriptografar
-    if criptografia = True:
+    if criptografia == True:
+        # criar lista de caracteres
+        listacaracter = []
+        for info in reclama_data:
+            infoLista = []
+            codigocaracter = ""
+            for caracter in info:
+                if caracter == "-":
+                    infoLista.append(codigocaracter)
+                    codigocaracter = ""
+                else:
+                    codigocaracter += caracter
+            listacaracter.append(infoLista)
         reclamacoes = descriptoOpen(reclama_data)
-    elif criptografia = False:
+    elif criptografia == False:
         reclamacoes = reclama_data
     # criar lista de reclamacoes
     cont = 0
@@ -103,12 +138,13 @@ def loginUsuario(user_data):
 def Reclamacao(reclamaCod, reclamaNew, user_cpf):
     ''' Interacao com o usuario para armazenar uma nova reclamacao na base
     '''
-    print("Selecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
+    print("\nSelecione o tipo de reclamação que você deseja fazer:\n1-Observei um vazamento de água na rua!\n2-Observei uma ligação clandestina (jacaré) na rede de abastecimento!\n3-Tá faltando água na minha casa!")
     reclama = input("Digite o número da reclamação: ")
     localiza = input("Insira o endereço em que você observou o problema (bairro, rua, número da casa à frente): ")
     codReclama = reclamaCod + 1 # codigo da ultima reclamacao registrada + 1
     rec = [str(codReclama), user_cpf, reclama, localiza]
     reclamaNew.append(rec)
+    print("\nContribuição armazenada!")
 
 #======================= CADASTRAR OBSERVADOR ===================#
 def cadastroObservador(user_data, user_cpf):
@@ -180,13 +216,15 @@ def visuRanking(user_data):
         listaContB.append(caso[1])
     # lista ordenada
     listaOrd = []
-    while len(listaOrd) < len(rankLista):
+    cont = 0
+    while cont < len(rankLista):
         maximo = max(listaContB)
         listaOrd.append(rankLista[listaCont.index(maximo)])
         listaContB.remove(maximo)
-    print("\n")
+        listaCont[listaCont.index(maximo)] = -1
+        cont +=1
     for usuario in listaOrd:
-        print(usuario[0], ": ", usuario[1], "Contribuições")
+        print("\n",usuario[0], ": ", usuario[1], "Contribuições")
 
 #========== Visualizar Infos Pessoais =========#
 def visuInfoUser(user_data, user_cpf):
@@ -194,7 +232,7 @@ def visuInfoUser(user_data, user_cpf):
     "Nome de Observador: ", user_data[user_cpf][1], "\n" ,
     "Nível de acesso: ",  user_data[user_cpf][3], "\n",
     "Email: ", user_data[user_cpf][2], "\n" ,
-    "Número de contribuições realizadas: ",  user_data[user_cpf][5], "\n")
+    "Número de contribuições realizadas: ",  user_data[user_cpf][5])
 
 #========== Baixar Dados das Reclamacoes =========#
 def downloadReclamacoes(reclamacoes):
@@ -209,7 +247,7 @@ def downloadReclamacoes(reclamacoes):
     base_reclama = open("data/base_reclamacoes.csv", 'w') # abrir arquivo
     base_reclama.write(dataReclama)
     base_reclama.close()
-    print("Dados das reclamações baixados!")
+    print("\nDados das reclamações baixados!")
 
 #=============== Atualizar Infos ================#
 def atualizaInfos(user_data, user_cpf):
@@ -226,26 +264,27 @@ def atualizaInfos(user_data, user_cpf):
             senhaNova = input("Digite a nova senha: ")
             senhaNovaB = input("Repita a senha, por favor: ")
             # testar senhas
-            qubra = False
+            quebra = False
             while quebra == False:
                 if senhaNova == senhaNovaB:
-                    qubra = True
+                    quebra = True
                 else:
                     print("Senhas não conferem")
                     user_senha = input("Digite sua senha de acesso: ")
                     user_senha2 = input("Repita a senha, por favor: ")
             user_data[user_cpf] = (senhaNova, user_data[user_cpf][1], user_data[user_cpf][2], user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
-            print("Senha atualizada!")
+            print("\nSenha atualizada!")
         # atualizar nome de usuario
         elif atualiza == 2:
             nomeNovo = input("Digite seu novo nome de observador: ")
             user_data[user_cpf] = (user_data[user_cpf][0], nomeNovo, user_data[user_cpf][2], user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
-            print("Nome de usuário atualizado!")
+            print("\nNome de usuário atualizado!")
         # atualizar email
         elif atualiza == 3:
             emailNovo = input("Digite seu novo email: ")
             user_data[user_cpf] = (user_data[user_cpf][0], user_data[user_cpf][1], emailNovo, user_data[user_cpf][3], user_data[user_cpf][4], user_data[user_cpf][5])
-            print("Email atualizado!")
+            print("\nEmail atualizado!")
+            print(user_data)
         # sair
         elif atualiza == 4:
             fluxo = False
@@ -261,6 +300,7 @@ def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew, reclamacoes):
     '''
     pare = False
     while pare == False:
+        print("\n")
         print("\nMenu do Observador da Água: \n1-Fazer uma reclamação\n2-Visualizar o ranking de observadores da Água\n3-Visualizar minhas informações pessoais\n4-Atualizar informações pessoais\n5-Baixar dados de reclamacoes\n6-Sair")
         fazer = int(input("Digite o numero da ação: "))
         # opcoes
@@ -277,7 +317,7 @@ def menuObservador(user_data, user_cpf, reclamaCod, reclamaNew, reclamacoes):
         elif fazer == 6:
             pare = True
         else:
-            print("Código de ação inválido")
+            print("\nCódigo de ação inválido\n")
 
 #======================== FUNCIONALIDADES DESENVOLVEDOR =======================#
 
@@ -291,10 +331,10 @@ def removeObservador(user_data):
     while quebra == False:
         if remove_cpf in user_data:
             user_data.pop(remove_cpf, None)
-            print("Observador removido com sucesso")
+            print("\nObservador removido com sucesso")
             quebra = True
         else:
-            remove_cpf = input("CPF não consta na base. Digite novamente: ")
+            remove_cpf = input("\nCPF não consta na base. Digite novamente: ")
 
 #=============== Transformar Observador em Desenvolvedor ================#
 def transDesenvolvedor(user_data):
@@ -320,6 +360,7 @@ def menuDesenvolvedor(user_data):
     pare = False
     valido = True
     while pare == False:
+        print("\n")
         print("\nMenu Desenvolvimento: \n1-Remover Observador dos usuários\n2-Transformar Observador em Desenvolvedor\n3-Sair")
         if valido == True:
             fazer = int(input("Digite o numero da ação: "))
@@ -336,13 +377,11 @@ def menuDesenvolvedor(user_data):
 
 #=========================== SALVAR INFOS ===========================#
 
-#====================== reclamacoes =====================#
-
-# criptografia
-def encriptSave(reclamaNew):
+#================== criptografia ====================#
+def encriptSave(lista):
     ''' Abre chave publica. Executa calculo de criptografia RAS
-        para cada caracter da lista reclamaNew. Retorna lista de
-        reclamacoes criptografada.
+        para cada caracter de uma lista de listas.
+        Retorna lista criptografada.
     '''
     # abrir chaves
     chavePublica = open("chaves/chavePublica.txt")
@@ -350,26 +389,27 @@ def encriptSave(reclamaNew):
     chavePublica.close()
     chavesPub = removeCaracter(chavesPub,"\n")
     # executar calculo
-    criptoReclamacoes =[]
-    for reclama in reclamaNew:
-        reclamaEncript = []
-        for info in reclama:
+    criptoLista = []
+    for caso in lista:
+        listaEncript = []
+        for info in caso:
             infoEncript = ""
             for caracter in info:
                 criptoCaracter = str(ord(caracter)^int(chavesPub[0]) % int(chavesPub[1]))
-                infoEncript += criptoCaracter
-            reclamaEncript.append(infoEncript)
-        criptoReclamacoes.append(reclamaEncript)
+                infoEncript += criptoCaracter + "-"
+            listaEncript.append(infoEncript)
+        criptoLista.append(listaEncript)
+    return criptoLista
 
-# escrever reclamacoes
+#====================== reclamacoes =====================#
 def stringReclamacoes(reclamaNew, criptografia):
     ''' Transforma lista de novas reclamacoes em string e salva no
         arquivo de reclamacoes de forma criptografada ou não.
     '''
     # criptografia
-    if criptografia = True:
+    if criptografia == True:
         lista_reclama = encriptSave(reclamaNew)
-    elif criptografia = False:
+    elif criptografia == False:
         lista_reclama = reclamaNew
     # criar string
     stringReclamacao = ""
@@ -378,10 +418,8 @@ def stringReclamacoes(reclamaNew, criptografia):
             stringReclamacao += info + "\n"
     return stringReclamacao
 
-
-
-#=========  usuarios ==========#
-def stringUsuarios(user_data, user_cpf, reclamaNew, lista_user_data, criptografia):
+#===================  usuarios ==================#
+def stringUsuarios(user_data, user_cpf, reclamaNew, criptografia):
     ''' Verifica se infos dos usuarios precisam serem atualizadas,
         com base em novas reclamacoes. Cria uma string a ser escrita
         em formato de leitura .CSV. Escreve string no arquivo e fecha o mesmo.
@@ -391,8 +429,19 @@ def stringUsuarios(user_data, user_cpf, reclamaNew, lista_user_data, criptografi
         for reclama in reclamaNew:
             user_data[reclama[1]] = (user_data[reclama[1]][0], user_data[reclama[1]][1], user_data[reclama[1]][2],
             user_data[reclama[1]][3], str(user_data[reclama[1]][4]+ str(reclama[0])), str(user_data[reclama[1]][5]+1))
-    # string write
-    userDataWrite = ""
+    # transformar em lista
+    user_lista = []
     for usuario in user_data:
-        userDataWrite += usuario + ";" + user_data[usuario][0] + ";" +user_data[usuario][1] + ";" +user_data[usuario][2] + ";" +user_data[usuario][3] + ";" +user_data[usuario][4] + ";" + str(user_data[usuario][5])+";\n"
-    return userDataWrite
+        user_lista.append([usuario, user_data[usuario][0], user_data[usuario][1], user_data[usuario][2], user_data[usuario][3], user_data[usuario][4], str(user_data[usuario][5])])
+    # criptografia
+    if criptografia == True:
+        lista_usuario = encriptSave(user_lista)
+    elif criptografia == False:
+        lista_usuario = user_lista
+    # transformar em string
+    stringUsuarios = ""
+    for caso in lista_usuario:
+        for info in caso:
+            stringUsuarios += info + ";"
+        stringUsuarios += "\n"
+    return stringUsuarios
